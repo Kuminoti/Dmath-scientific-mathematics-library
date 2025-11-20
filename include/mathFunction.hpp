@@ -302,14 +302,14 @@ public:
 
     double operator()(double x) const;
     
-
+    
+    
     SingleVarFunction operator+ ( Function funcOne);
     SingleVarFunction operator- ( Function funcOne);
     SingleVarFunction operator* ( Function funcOne);
     SingleVarFunction operator/ ( Function funcOne);
     
     
-
     SingleVarFunction operator+ (SingleVarFunction funcOne);
     SingleVarFunction operator- (SingleVarFunction funcOne);
     SingleVarFunction operator* (SingleVarFunction funcOne);
@@ -321,7 +321,7 @@ public:
      * (f * g)(x) := f(g(x))
     */
     SingleVarFunction composition(SingleVarFunction fOfX, SingleVarFunction gOfX);
-
+    SingleVarFunction compose(SingleVarFunction func);
 
     /*
         * This method, getFunctionVector, returns a vector filled with all function values

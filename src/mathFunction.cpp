@@ -100,6 +100,7 @@ Dmath::SingleVarFunction  Dmath::SingleVarFunction::operator/ ( Function funcOne
     return func;
 }
 
+//For function compsition f(g(x))
 
 
 Dmath::SingleVarFunction Dmath::SingleVarFunction::operator+(Dmath::SingleVarFunction funcOne){
@@ -163,6 +164,15 @@ Dmath::SingleVarFunction Dmath::SingleVarFunction::composition(Dmath::SingleVarF
 
     return func;
 }
+
+Dmath::SingleVarFunction Dmath::SingleVarFunction::compose(Dmath::SingleVarFunction func){
+    auto mainFunc = *this;
+     auto comp = [func, mainFunc](double x) mutable ->double {
+        return mainFunc(func(x));
+    };
+    return comp;
+}
+
 double Dmath::SingleVarFunction::operator()(double x)  const{
     if (funcBase) {
         return funcBase->Callx(x); // Delegate the call to the stored function
