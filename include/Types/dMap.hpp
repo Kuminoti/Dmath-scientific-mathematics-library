@@ -4,8 +4,10 @@
 #define D_MAP_HPP
 
 #include "../macros.hpp"
+#include"dataTypes.hpp"
 #include<optional>
 #include<mutex>
+#include<initializer_list>
 
 NAMESPACESTART
 template <class typeOne, class typeTwo>
@@ -16,6 +18,12 @@ private:
 public:
 
     MapD() = default;
+
+    MapD(std::initializer_list<Dmath::Duo<typeOne, typeTwo>> list) {
+        for (const auto& p : list) {
+            insert(p.one, p.two);   // oder push_back etc.
+        }
+    }
 
     // Methode zum parallelen Suchen eines Schlüssels
     std::optional<Dmath::Duo<typeOne, typeTwo>> findKey(typeOne key) {

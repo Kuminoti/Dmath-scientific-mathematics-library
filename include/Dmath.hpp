@@ -3,6 +3,11 @@
 #ifndef DMATH_H
 #define DMATH_H
 
+
+#include"Types/dMap.hpp"
+#include"Types/Dstring.hpp"
+
+
 #include"dataTypes.hpp"         //Contains small and basic datatypes
 #include"mathVector.hpp"        //2D and 3D Vectors
 
@@ -12,6 +17,7 @@
 #include"complex.hpp"           //complex numbers
 #include"complexFunctions.hpp"
 #include"vectorfunction.hpp"
+
 
 
 
