@@ -45,8 +45,6 @@ public:
             left ->addleft (newData, newID);
         }
     }
-
-    int getID() const { return ID; }
 };
 
 
