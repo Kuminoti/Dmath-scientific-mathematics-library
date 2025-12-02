@@ -266,7 +266,7 @@ public: //public getters
 public: //operator overloading
 
 
-    SingleVarFunction& operator=(SingleVarFunction& other);
+    SingleVarFunction& operator=(const SingleVarFunction& other);
 
     // Lambda-Zuweisung
     template<typename Callable>
@@ -297,6 +297,10 @@ public:
     SingleVarFunction(const SingleVarFunction& other) : funcBase(other.funcBase ? other.funcBase->clone() : nullptr) {}
 
     SingleVarFunction() = default;
+
+    // Move-Konstruktor
+SingleVarFunction(SingleVarFunction&& other) noexcept
+    : funcBase(std::move(other.funcBase)) {}
 
 //Operator overloading
 

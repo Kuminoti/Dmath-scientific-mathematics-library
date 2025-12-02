@@ -14,7 +14,7 @@ bool Dmath::SingleVarFunction::checkParams(Dmath::Parameters params){
 
 
 
-Dmath::SingleVarFunction&  Dmath::SingleVarFunction::operator=(SingleVarFunction& other) {
+Dmath::SingleVarFunction&  Dmath::SingleVarFunction::operator=(const SingleVarFunction& other) {
     if (this != &other) {
         this->funcBase = other.funcBase ? other.funcBase->clone() : nullptr;
     }
