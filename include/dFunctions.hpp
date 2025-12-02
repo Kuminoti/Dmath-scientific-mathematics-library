@@ -17,6 +17,16 @@ NAMESPACESTART
  auto sec  = [](double x) ->double {return 1/std::cos(x); };
  auto cec  = [](double x) ->double {return 1/std::sin(x); };
  auto cot  = [](double x) ->double {return 1/std::tan(x); };
+
+ auto asec = [](double x) ->double { return std::acos(1/x); };
+ auto acsc = [](double x) ->double { return std::asin(1/x); };
+ auto acot = [](double x) ->double {
+    if(x < 0){
+        return (std::atan(1/x) + PI);
+    }
+    return std::atan(1/x);
+ };
+
  auto cosh = [](double x) ->double { return (std::exp(x) + std::exp(-x)) / 2; };    
  auto sinh = [](double x) ->double { return (std::exp(x) - std::exp(-x)) / 2; };   
 
