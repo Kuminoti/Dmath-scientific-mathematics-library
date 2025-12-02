@@ -41,7 +41,8 @@ enum ERROR_CODE{
   OUT_OF_RANGE     = 2002,
   TYPE_ERROR       = 3001,
   WRONG_PARAMETER  = 4001,
-  WRONG_TYPE       = 5001
+  WRONG_TYPE       = 5001,
+  STRING_INPUT_ERR = 6001
 
 };
 
