@@ -415,6 +415,9 @@ public: //Public construtors:
     // Copy constructor
     DoubleVarFunction(const DoubleVarFunction& other) : funcBase(other.funcBase ? other.funcBase->clone() : nullptr) {}
 
+    DoubleVarFunction(DoubleVarFunction&& other) noexcept
+    : funcBase(std::move(other.funcBase)) {}
+
 public: //public operators
 
     // Operator to call the function with two arguments (x, y)
