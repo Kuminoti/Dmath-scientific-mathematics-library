@@ -28,7 +28,7 @@ Dmath::SingleVarFunction linerarEquation(Dmath::Scalar a, Dmath::Scalar b) {
 //Quadratic equation builder
 Dmath::SingleVarFunction quadraticEquation(Dmath::Scalar a, Dmath::Scalar b, Dmath::Scalar c) {
     return [a, b, c](double x) -> double {
-        return a * x * x + b * x + c;
+        return a * std::pow((x+b), 2)  + c;
     };
 }
 
