@@ -34,6 +34,16 @@ public:
 
     //File operations
     std::string getFileExtension(const std::string& filename);
+    std::string removeWhitespace(const std::string& str){
+    std::string result;
+    result.reserve(str.size()); // Performance-Optimierung
+
+    for (char c : str)
+        if (!std::isspace(static_cast<unsigned char>(c)))
+            result.push_back(c);
+
+    return result;
+}
     
 };
 
