@@ -33,6 +33,10 @@
     #define BAR_TO_PSI      14.5038
     #define CAUSALITY       299792458 //basicly the speed of light C
     #define ROUNDING_VALUE  3 //rounding 3 digits after the decimal point/komma
+    #define HALF_PI    (PI / 2)
+    #define THREE_PI   (PI * 3)
+    #define QUARTER_PI (PI / 4)
+    
 
 
     #define TWOPI      (2 * PI)
@@ -41,6 +45,7 @@
     #define DEG_TO_RAD (PI/180.f)              //Degres to Radiants
     #define DEGTORAD(ANGLE) ((ANGLE)*DEG_TO_RAD)
     #define RADTODEG(RADIANT) ((RADIANT)*RAD_TO_DEG)
+    
 
 
     #define STDRES     0.05f                 //The standard resolution for more dimensional vector systems
