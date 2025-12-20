@@ -34,6 +34,7 @@
 #include"dataTypes.hpp"
 #include"mathVector.hpp"
 #include"mathmaticalCondition.hpp"
+#include"dFunctions.hpp"
 #include<memory>
 #include<windows.h>
 
@@ -49,13 +50,15 @@ NAMESPACESTART
 // Base class for functions
 class FunctionBase {
 public:
+    FunctionBase() = default;
     virtual ~FunctionBase() = default;
     virtual double Call() = 0;
     virtual double Callx(double x) = 0;             // For f(x)
     virtual double CallXY(double x, double y) = 0;  // For f(x, y)
     virtual double CallXYZ(double x, double y, double z) = 0; //For f(x,y,z)
 
-    virtual std::unique_ptr<FunctionBase> clone() = 0;
+
+    virtual std::shared_ptr<FunctionBase> clone() const = 0;
 };
 
 #pragma endregion
@@ -86,8 +89,8 @@ public:
 
     }
 
-    std::unique_ptr<FunctionBase> clone()  override {
-        return std::make_unique<FunctionWrapperConst<Func>>(func);
+    std::shared_ptr<FunctionBase> clone() const override {
+        return std::make_shared<FunctionWrapper<Func>>(*this);
     }
 
 };
@@ -116,9 +119,9 @@ public:
         throw std::runtime_error("Single variable function does not support CallXY."); // Not implemented for single variable function
     }
 
-    std::unique_ptr<FunctionBase> clone()  override {
-        return std::make_unique<FunctionWrapper<FuncX>>(singleFunction);
-    }
+    std::shared_ptr<FunctionBase> clone() const override {
+    return std::make_shared<FunctionWrapper<FuncX>>(*this);
+}
 
 };
 
@@ -146,8 +149,8 @@ public:
         throw std::runtime_error("Single variable function does not support CallXY."); // Not implemented for single variable function
     }
 
-    std::unique_ptr<FunctionBase> clone()  override {
-        return std::make_unique<FunctionWrapperXY<FuncXY>>(doubleFunction);
+    std::shared_ptr<FunctionBase> clone() const override {
+        return std::make_shared<FunctionWrapperXY<FuncXY>>(*this);
     }
 };
 
@@ -173,8 +176,8 @@ public:
     double CallXYZ(double x, double y, double z) override {
         return tripleFunc(x,y,z);
     }
-    std::unique_ptr<FunctionBase> clone()  override {
-        return std::make_unique<FunctionWrapperXYZ<FuncXYZ>>(tripleFunc);
+    std::shared_ptr<FunctionBase> clone() const override {
+        return std::make_shared<FunctionWrapperXYZ<FuncXYZ>>(*this);
     }
     
 };
@@ -187,7 +190,7 @@ public:
 class SHARED_LIB Function{
 
 private: // Private members:
-    std::unique_ptr<FunctionBase> funcBase;
+    std::shared_ptr<FunctionBase> funcBase;
 
 public: 
 
@@ -200,7 +203,7 @@ public:
 
     template<typename Callable>
     Function& operator=(Callable func) {
-        this->funcBase = std::make_unique<FunctionWrapperConst<Callable>>(func);
+        this->funcBase = std::make_shared<FunctionWrapperConst<Callable>>(func);
         return *this;
     }
 
@@ -216,7 +219,7 @@ public:
 
 
     template<typename Callable>
-    Function(Callable func) : funcBase(std::make_unique<FunctionWrapperConst<Callable>>(func)) {}
+    Function(Callable func) : funcBase(std::make_shared<FunctionWrapperConst<Callable>>(func)) {}
 
     Function(const Function& other)
     : funcBase(other.funcBase ? other.funcBase->clone() : nullptr) {}
@@ -245,9 +248,9 @@ public:
 class SHARED_LIB SingleVarFunction {
 
 private: //Private members:
-    std::unique_ptr<FunctionBase> funcBase; // Smart pointer for memory management
+    std::shared_ptr<FunctionBase> funcBase; // Smart pointer for memory management
    
-    const double dx = 0.000001;
+    double dx = 0.000001;
 
     
     
@@ -266,18 +269,23 @@ public: //public getters
 public: //operator overloading
 
 
-    SingleVarFunction& operator=(const SingleVarFunction& other);
+    SingleVarFunction& operator=(const SingleVarFunction& other) {
+    if (this != &other) {
+        funcBase = other.funcBase ? other.funcBase->clone() : nullptr;
+    }
+    return *this;
+}
 
     // Lambda-Zuweisung
     template<typename Callable>
     SingleVarFunction& operator=(Callable func) {
-        this->funcBase = std::make_unique<FunctionWrapper<Callable>>(func);
+        funcBase = std::make_shared<FunctionWrapper<Callable>>(std::move(func));
         return *this;
     }
 
     // Move-Zuweisung
-    SingleVarFunction& operator=(SingleVarFunction&& other) noexcept;
-
+    
+    SingleVarFunction& operator=(SingleVarFunction&& other) noexcept = default;
 
 
     /* Calculates the number of elements for exapmle if you want
@@ -291,8 +299,10 @@ public: //operator overloading
 
 public:
 
+
     template<typename Callable>
-    SingleVarFunction(Callable func) : funcBase(std::make_unique<FunctionWrapper<Callable>>(func)) {}
+    SingleVarFunction(Callable func)
+        : funcBase(std::make_shared<FunctionWrapper<Callable>>(std::move(func))) {}
 
     SingleVarFunction(const SingleVarFunction& other) : funcBase(other.funcBase ? other.funcBase->clone() : nullptr) {}
 
@@ -340,7 +350,7 @@ SingleVarFunction(SingleVarFunction&& other) noexcept
         *         the step size is non-positive.
     */
 
-    std::vector<double> getFunctionVector(double start, double stopp, double stepps);
+    std::vector<double> getFunctionVector(Dmath::Parameters params);
 
     /*
         * This method, getDerivativeVector, computes the derivative of a mathematical function 
@@ -358,7 +368,7 @@ SingleVarFunction(SingleVarFunction&& other) noexcept
         * If the input parameters are invalid (start >= stopp or stepps <= 0), an empty vector is returned.
     */
 
-    std::vector<double> getDerivativeVector(double start, double stopp, double stepps);
+    std::vector<double> getDerivativeVector(Dmath::Parameters params);
 
     /*
         * This method calculates the approximate anti-derivative (integral) values of a mathematical function
@@ -377,9 +387,9 @@ SingleVarFunction(SingleVarFunction&& other) noexcept
         * multiplying it by the differential element 'dx'.
     */
 
-    std::vector<double> getSecondDerivative(double start, double stopp, double stepps);
+    std::vector<double> getSecondDerivative(Dmath::Parameters params);
 
-    std::vector<double> getAntiDerivativeVector(double start, double stopp, double stepps);
+    std::vector<double> getAntiDerivativeVector(Dmath::Parameters params);
 
 
     //returns the first and second derivative at a given point as a scalar value
@@ -396,9 +406,9 @@ SingleVarFunction(SingleVarFunction&& other) noexcept
 
 class SHARED_LIB DoubleVarFunction {
 private:
-    std::unique_ptr<FunctionBase> funcBase; // Smart pointer for the function
+    std::shared_ptr<FunctionBase> funcBase; // Smart pointer for the function
    
-    const double dx = 0.0000001;
+    double dx = 0.0000001;
 
 private:
     bool checkParams(Dmath::Parameters params);
@@ -408,15 +418,17 @@ public: //Public construtors:
     // Default constructor
     DoubleVarFunction() = default; 
 
-    // Constructor that takes a callable object (e.g., lambda function) for f(x, y)
+    // Callable-Konstruktor (Lambda, Functor, std::function, ...)
     template<typename FuncXY>
-    DoubleVarFunction(FuncXY func) : funcBase(std::make_unique<FunctionWrapperXY<FuncXY>>(func)) {} // Wrapper for f(x, y)
+    DoubleVarFunction(FuncXY func)
+        : funcBase(std::make_shared<FunctionWrapperXY<FuncXY>>(std::move(func))) {}
 
-    // Copy constructor
-    DoubleVarFunction(const DoubleVarFunction& other) : funcBase(other.funcBase ? other.funcBase->clone() : nullptr) {}
+    // Copy-Konstruktor (tiefe Kopie)
+    DoubleVarFunction(const DoubleVarFunction& other)
+        : funcBase(other.funcBase ? other.funcBase->clone() : nullptr) {}
 
-    DoubleVarFunction(DoubleVarFunction&& other) noexcept
-    : funcBase(std::move(other.funcBase)) {}
+    // Move-Konstruktor
+    DoubleVarFunction(DoubleVarFunction&&) noexcept = default;
 
 public: //public operators
 
@@ -424,7 +436,7 @@ public: //public operators
     Dmath::Scalar operator()(Dmath::Scalar x, Dmath::Scalar y) const;
     Dmath::Scalar operator()(Dmath::Vec2D vector) const;
 
-    DoubleVarFunction& operator=(const DoubleVarFunction& other);
+    DoubleVarFunction& operator=(const DoubleVarFunction& other);//
 
     DoubleVarFunction operator+(DoubleVarFunction funcOne);
     DoubleVarFunction operator-(DoubleVarFunction funcOne);
@@ -432,23 +444,21 @@ public: //public operators
     DoubleVarFunction operator/(DoubleVarFunction funcOne);
 
 
-    DoubleVarFunction& operator=(DoubleVarFunction&& other) noexcept;
+ DoubleVarFunction& operator=(DoubleVarFunction&&) noexcept = default;
 
-    // Lambda-Zuweisung
-    template<typename Callable>
-
+   template<typename Callable>
     DoubleVarFunction& operator=(Callable func) {
-        this->funcBase = std::make_unique<FunctionWrapperXY<Callable>>(func);
+        funcBase = std::make_shared<FunctionWrapperXY<Callable>>(std::move(func));
         return *this;
     }
 
 
 public: //public getters
-    std::vector<double> getFunctionVector (double start, double stopp, double stepps);
+    std::vector<double> getFunctionVector (Dmath::Parameters params);
 
     //Retuns a std::vector filled with parital derivatives
-    std::vector<double> getPartialDerivteX(double start, double stopp, double stepps);
-    std::vector<double> getPartialDerivteY(double start, double stopp, double stepps);
+    std::vector<double> getPartialDerivteX(Dmath::Parameters params);
+    std::vector<double> getPartialDerivteY(Dmath::Parameters params);
 
     //Retuns the parital derivative as a function object
     DoubleVarFunction getPartialX();
@@ -457,8 +467,8 @@ public: //public getters
 
     
 
-    std::vector<double> getAntiDerivativeX(double start, double stopp, double stepps);
-    std::vector<double> getAntiDerivativeY(double start, double stopp, double stepps);
+    std::vector<double> getAntiDerivativeX(Dmath::Parameters params);
+    std::vector<double> getAntiDerivativeY(Dmath::Parameters params);
 
 
 public: //mathmatical operations
@@ -489,8 +499,8 @@ public: //helper methods
 
 class SHARED_LIB TripleVarFunction{
 private:
-    std::unique_ptr<FunctionBase> funcBase;
-    const double dx = 0.0000001;
+    std::shared_ptr<FunctionBase> funcBase;
+     double dx = 0.0000001;
 
 
     bool checkParams(Dmath::Parameters params);
@@ -501,12 +511,18 @@ public: // Public constructors:
     //default constructor
     TripleVarFunction() = default;
 
-    // Constructor that takes a callable object (e.g., lambda function) for f(x, y, z)
-    template<typename FuncXYZ>
-    TripleVarFunction(FuncXYZ func) : funcBase(std::make_unique<FunctionWrapperXYZ<FuncXYZ>>(func)){};
 
-    // Copy constructor
-    TripleVarFunction(const TripleVarFunction& other) : funcBase(other.funcBase ? other.funcBase->clone() : nullptr) {}
+    /////////////////////////////////////////////////////////
+    // Callable-Konstruktor (Lambda, Functor, std::function, ...)
+    template<typename FuncXYZ>
+    TripleVarFunction(FuncXYZ func)
+        : funcBase(std::make_shared<FunctionWrapperXYZ<FuncXYZ>>(std::move(func))) {}
+//////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////
+   TripleVarFunction(const TripleVarFunction& other)
+        : funcBase(other.funcBase ? other.funcBase->clone() : nullptr) {}
+///////////////////////////////////////////////////////
 
 public: //public operators
     // Operator to call the function with three arguments (x, y, z)
@@ -518,31 +534,34 @@ public: //public operators
     TripleVarFunction operator*(Dmath::TripleVarFunction funcOne);
     TripleVarFunction operator/(Dmath::TripleVarFunction funcOne);
 
-    // Assignment operator for TripleVarFunction
+    // Assignment operator for TripleVarFunction//////////////////
     TripleVarFunction& operator=(const TripleVarFunction& other);
+    //////////////////////////////////////////////////////////////
+
 
     // Lambda-Zuweisung
+    // Lambda / Callable-Zuweisung
     template<typename Callable>
-    TripleVarFunction& operator=(Callable func){
-        this->funcBase = std::make_unique<FunctionWrapperXYZ<Callable>>(func);
+    TripleVarFunction& operator=(Callable func) {
+        funcBase = std::make_shared<FunctionWrapperXYZ<Callable>>(std::move(func));
         return *this;
     }
 
     // Move-Zuweisung
-    TripleVarFunction& operator=(TripleVarFunction&& other) noexcept;
+    TripleVarFunction& operator=(TripleVarFunction&&) noexcept = default;
 
 public: //public mathmatical operations
 
-    std::vector<double> getFunctionVector (double start, double stopp, double stepps);
+    std::vector<double> getFunctionVector (Dmath::Parameters params);
 
-    std::vector<double> getPartialDerivteX(double start, double stopp, double stepps);
-    std::vector<double> getPartialDerivteY(double start, double stopp, double stepps);
-    std::vector<double> getPartialDerivteZ(double start, double stopp, double stepps);
+    std::vector<double> getPartialDerivteX(Dmath::Parameters params);
+    std::vector<double> getPartialDerivteY(Dmath::Parameters params);
+    std::vector<double> getPartialDerivteZ(Dmath::Parameters params);
 
 
-    std::vector<double> getAntiDerivativeX(double start, double stopp, double stepps);
-    std::vector<double> getAntiDerivativeY(double start, double stopp, double stepps);
-    std::vector<double> getAntiDerivativeZ(double start, double stopp, double stepps);
+    std::vector<double> getAntiDerivativeX(Dmath::Parameters params);
+    std::vector<double> getAntiDerivativeY(Dmath::Parameters params);
+    std::vector<double> getAntiDerivativeZ(Dmath::Parameters params);
 
    // std::vector<Dmath::Vec3D> getGradient(double start, double stopp, double stepps);
 

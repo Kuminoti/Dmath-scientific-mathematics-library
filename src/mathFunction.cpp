@@ -14,19 +14,14 @@ bool Dmath::SingleVarFunction::checkParams(Dmath::Parameters params){
 
 
 
-Dmath::SingleVarFunction&  Dmath::SingleVarFunction::operator=(const SingleVarFunction& other) {
-    if (this != &other) {
-        this->funcBase = other.funcBase ? other.funcBase->clone() : nullptr;
-    }
-    return *this;
-}
+// Dmath::SingleVarFunction&  Dmath::SingleVarFunction::operator=(const SingleVarFunction& other) {
+//     if (this != &other) {
+//         this->funcBase = other.funcBase ? other.funcBase->clone() : nullptr;
+//     }
+//     return *this;
+// }
 
-Dmath::SingleVarFunction& Dmath::SingleVarFunction::operator=(SingleVarFunction&& other) noexcept {
-    if (this != &other) {
-        this->funcBase = std::move(other.funcBase);
-    }
-    return *this;
-}
+
 
 
 size_t Dmath::SingleVarFunction::numOfElements(Dmath::Parameters param){
@@ -192,46 +187,46 @@ Dmath::SingleVarFunction Dmath::SingleVarFunction::operator+(Dmath::Scalar num){
 }
 
 
-std::vector<double>  Dmath::SingleVarFunction::getFunctionVector(double start, double stopp, double stepps){
+std::vector<double>  Dmath::SingleVarFunction::getFunctionVector(Dmath::Parameters params){
     //Error checking: 
 
-    if(start >= stopp || stepps == 0){
+    if(!this->checkParams(params)){
         return std::vector<double>(0);
     }
 
-    Dmath::Parameters params(start,stopp,stepps);
-    const size_t num = this->numOfElements(params);
+    
+    Dmath::Natural num = Dmath::numberOfElements(params);
  
     std::vector<double> mainVec;
 
     for(size_t i = 0; i < num; i++){
-        double currentResult = funcBase->Callx((start + i*stepps));
+        double currentResult = funcBase->Callx((params.one + i*params.three));
         mainVec.push_back(currentResult);
     }
     return mainVec;
 }
 
 
-std::vector<double> Dmath::SingleVarFunction::getDerivativeVector(double start, double stopp, double stepps){
+std::vector<double> Dmath::SingleVarFunction::getDerivativeVector(Dmath::Parameters params){
 
     //It,s simpler to use a struct in stet of all args inside the class 
-    Dmath::Parameters params(start,stopp,stepps);
+    
     
     if(!this->checkParams(params)){
         return std::vector<double>(0);
     }
 
     //Number of elements
-    const size_t num = this->numOfElements(params);
+    Dmath::Natural num = Dmath::numberOfElements(params);
     
     std::vector<double> mainVector;
 
     for(size_t i = 0; i < num; i++){
 
-        double x = start + i * stepps; // Current x value
-        double plusDX  = this->funcBase->Callx(x + dx); // f(x + dx)
-        double minusDX = this->funcBase->Callx(x - dx); // f(x - dx)
-        double result  = (plusDX - minusDX) / (2 * dx); // Central difference method
+        double x = params.one + i * params.three; // Current x value
+        double plusDX  = this->funcBase->Callx(x + params.three); // f(x + dx)
+        double minusDX = this->funcBase->Callx(x - params.three); // f(x - dx)
+        double result  = (plusDX - minusDX) / (2 * params.three); // Central difference method
 
         mainVector.push_back(result); // Store the result
 
@@ -239,20 +234,20 @@ std::vector<double> Dmath::SingleVarFunction::getDerivativeVector(double start, 
     return mainVector;
 }
 
-std::vector<double> Dmath::SingleVarFunction::getSecondDerivative(double start, double stopp, double stepps){
-    const Dmath::Parameters params(start,stopp,stepps);
+std::vector<double> Dmath::SingleVarFunction::getSecondDerivative(Dmath::Parameters params){
+    
     if(!this->checkParams(params)){
         return std::vector<double>(0);
     }
-    const size_t num = this->numOfElements(params);
+    Dmath::Natural num = Dmath::numberOfElements(params);
     std::vector<double> mainVector;
     for(size_t i = 0; i < num; i++){
-        const double x = start + i * stepps;
+        const double x = params.one + i * params.three;
         const double TwofOfX = 2 * this->funcBase->Callx(x);
-        const double plusDX  = this->funcBase->Callx(x+this->dx);
-        const double minusDX = this->funcBase->Callx(x-this->dx);
+        const double plusDX  = this->funcBase->Callx(x+params.three);
+        const double minusDX = this->funcBase->Callx(x-params.three);
 
-        const double currentResult = (plusDX - TwofOfX + minusDX)/(dx*dx);
+        const double currentResult = (plusDX - TwofOfX + minusDX)/(params.three*params.three);
         mainVector.push_back(currentResult);
 
     }
@@ -260,26 +255,24 @@ std::vector<double> Dmath::SingleVarFunction::getSecondDerivative(double start, 
 }
 
 
-std::vector<double> Dmath::SingleVarFunction::getAntiDerivativeVector(double start, double stopp, double stepps) {
-    Dmath::Parameters param(start, stopp, stepps);
-    if (!this->checkParams(param)) {
+std::vector<double> Dmath::SingleVarFunction::getAntiDerivativeVector(Dmath::Parameters params) {
+    
+    if (!this->checkParams(params)) {
         return std::vector<double>(0);
     }
-
-    // Number of intervals
-    size_t num = this->numOfElements(param);
+    Dmath::Natural num = Dmath::numberOfElements(params);
     std::vector<double> mainVec;
-    double integral = this->funcBase->Callx(start);
+    double integral = this->funcBase->Callx(params.one);
     mainVec.push_back(integral);
     // Numerical integration over the interval
     for (size_t i = 0; i < num; i++) {
-        double currentX = start + i * stepps;
-        double nextX = currentX + stepps;
+        double currentX = params.one + i * params.three;
+        double nextX = currentX + params.three;
 
         // Trapezoidal rule: Average of function values at currentX and nextX
         double avgValue = 0.5 * (this->funcBase->Callx(currentX) + this->funcBase->Callx(nextX));
         
-        integral += avgValue * stepps;   // Step size * average value
+        integral += avgValue * params.three;   // Step size * average value
         mainVec.push_back(integral);     // Store the integrated value
     }
 
@@ -353,18 +346,15 @@ Dmath::Scalar Dmath::DoubleVarFunction::operator()(Dmath::Vec2D vector) const{
 }
 
 
-Dmath::DoubleVarFunction& Dmath::DoubleVarFunction::operator=(DoubleVarFunction&& other) noexcept {
-    if (this != &other) {
-        this->funcBase = std::move(other.funcBase);
-    }
-    return *this;
-}
+
 
 Dmath::DoubleVarFunction& Dmath::DoubleVarFunction::operator=(const DoubleVarFunction& other) {
-    if (this != &other) {
-        this->funcBase = other.funcBase ? other.funcBase->clone() : nullptr;
-    }
-    return *this;
+    
+        if (this != &other) {
+            funcBase = other.funcBase ? other.funcBase->clone() : nullptr;
+        }
+        return *this;
+    
 }
 
 
@@ -418,12 +408,15 @@ Dmath::DoubleVarFunction Dmath::DoubleVarFunction::composition( Dmath::DoubleVar
 }
 
 
-std::vector<double> Dmath::DoubleVarFunction::getFunctionVector(double start, double stopp, double stepps){
-    Dmath::Parameters params(start,stopp,stepps);
+std::vector<double> Dmath::DoubleVarFunction::getFunctionVector(Dmath::Parameters params){
+   
     if(!this->checkParams(params)){
         return std::vector<double>(0);
     }
-        const size_t num = static_cast<size_t>((stopp-start)/stepps);
+        Dmath::Natural num   = Dmath::numberOfElements(params);
+        Dmath::Scalar start  = params.one;
+        Dmath::Scalar stopp  = params.two;
+        Dmath::Scalar stepps = params.three;
 
         std::vector<double> mainVec;
         for(size_t x = 0; x < num; x++){
@@ -441,12 +434,15 @@ std::vector<double> Dmath::DoubleVarFunction::getFunctionVector(double start, do
     }
 
 
-std::vector<double> Dmath::DoubleVarFunction::getPartialDerivteX(double start, double stopp, double stepps){
-    Dmath::Parameters params(start,stopp,stepps);
+std::vector<double> Dmath::DoubleVarFunction::getPartialDerivteX(Dmath::Parameters params){
+
     if(!this->checkParams(params)){
         return std::vector<double>(0);
     }
-    const size_t num = static_cast<size_t>((stopp-start)/stepps);
+    Dmath::Natural num = Dmath::numberOfElements(params);
+    Dmath::Scalar start  = params.one;
+    Dmath::Scalar stopp  = params.two;
+    Dmath::Scalar stepps = params.three;
 
     std::vector<double> mainVec;
 
@@ -465,9 +461,9 @@ std::vector<double> Dmath::DoubleVarFunction::getPartialDerivteX(double start, d
 }
 
 Dmath::DoubleVarFunction Dmath::DoubleVarFunction::getPartialY() {
-        auto basePtr = funcBase.get();
+        auto basePtr = funcBase;
         Dmath::Scalar dy = this->dx; //to make the notation consistent
-        return DoubleVarFunction([basePtr,this,dy](double x, double y) {
+        return DoubleVarFunction([basePtr,dy](double x, double y) {
             double plusDY  = basePtr->CallXY(x, y + dy);
             double minusDY = basePtr->CallXY(x, y - dy);
             return (plusDY - minusDY) / (2 * dy);
@@ -476,22 +472,25 @@ Dmath::DoubleVarFunction Dmath::DoubleVarFunction::getPartialY() {
 
 Dmath::DoubleVarFunction Dmath::DoubleVarFunction::getPartialX(){
 
-    auto basePtr = funcBase.get();
-
-    return DoubleVarFunction([basePtr,this](double x, double y) {
-        double plusDX  = basePtr->CallXY(x + dx, y);
-        double minusDX = basePtr->CallXY(x - dx, y);
-        return (plusDX - minusDX) / (2 * dx);
+    auto basePtr = funcBase;
+    Dmath::Scalar dy = this->dx; //to make the notation consistent
+    return DoubleVarFunction([basePtr,dy](double x, double y) {
+        double plusDX  = basePtr->CallXY(x + dy, y);
+        double minusDX = basePtr->CallXY(x - dy, y);
+        return (plusDX - minusDX) / (2 * dy);
         });
     }
 
 
-std::vector<double> Dmath::DoubleVarFunction::getPartialDerivteY(double start, double stopp, double stepps){
-    Parameters params(start,stopp,stepps);
+std::vector<double> Dmath::DoubleVarFunction::getPartialDerivteY(Dmath::Parameters params){
+
     if(!this->checkParams(params)){
         return std::vector<double>(0);
     }
-    const size_t num = static_cast<size_t>((stopp-start)/stepps);
+    Dmath::Natural num = Dmath::numberOfElements(params);
+    Dmath::Scalar start  = params.one;
+    Dmath::Scalar stopp  = params.two;
+    Dmath::Scalar stepps = params.three;
 
     std::vector<double> mainVec;
 
@@ -512,13 +511,17 @@ std::vector<double> Dmath::DoubleVarFunction::getPartialDerivteY(double start, d
 
 
 
-std::vector<double> Dmath::DoubleVarFunction::getAntiDerivativeX(double start, double stopp, double stepps) {
-    Dmath::Parameters params(start, stopp, stepps);
+std::vector<double> Dmath::DoubleVarFunction::getAntiDerivativeX(Dmath::Parameters params) {
+
     if (!this->checkParams(params)) {
         return std::vector<double>(0);
     }
 
-    size_t num = this->numOfElements(params);
+    Dmath::Natural num = Dmath::numberOfElements(params);
+    Dmath::Scalar start  = params.one;
+    Dmath::Scalar stopp  = params.two;
+    Dmath::Scalar stepps = params.three;
+
     std::vector<double> mainVec;
     double integral = this->funcBase->CallXY(start, start);
     mainVec.push_back(integral);
@@ -578,13 +581,17 @@ Dmath::Scalar Dmath::DoubleVarFunction::secondDerivativeYX(Dmath::Scalar x, Dmat
 }
 
 
-std::vector<double> Dmath::DoubleVarFunction::getAntiDerivativeY(double start, double stopp, double stepps) {
-    Dmath::Parameters params(start, stopp, stepps);
+std::vector<double> Dmath::DoubleVarFunction::getAntiDerivativeY(Dmath::Parameters params) {
+    
     if (!this->checkParams(params)) {
         return std::vector<double>(0);
     }
 
-    size_t num = this->numOfElements(params);
+    Dmath::Natural num = Dmath::numberOfElements(params);
+    Dmath::Scalar start  = params.one;
+    Dmath::Scalar stopp  = params.two;
+    Dmath::Scalar stepps = params.three;
+
     std::vector<double> mainVec;
     double integral = this->funcBase->CallXY(start, start);
     mainVec.push_back(integral);
@@ -688,18 +695,14 @@ Dmath::TripleVarFunction Dmath::TripleVarFunction::operator/(Dmath::TripleVarFun
 
 Dmath::TripleVarFunction& Dmath::TripleVarFunction::operator=(const TripleVarFunction& other) {
     if (this != &other) {
-        this->funcBase = other.funcBase ? other.funcBase->clone() : nullptr;
+        funcBase = other.funcBase ? other.funcBase->clone() : nullptr;
     }
     return *this;
 }
 
 
-Dmath::TripleVarFunction& Dmath::TripleVarFunction::operator=(TripleVarFunction&& other) noexcept {
-    if (this != &other) {
-        this->funcBase = std::move(other.funcBase);
-    }
-    return *this;
-}
+
+
 
 
 
@@ -719,12 +722,16 @@ size_t Dmath::TripleVarFunction::numberOfElements(Dmath::Parameters params){
 }
 
 
-std::vector<double> Dmath::TripleVarFunction::getFunctionVector(double start, double stopp, double stepps){
-    Dmath::Parameters params(start,stopp,stepps);
+std::vector<double> Dmath::TripleVarFunction::getFunctionVector(Dmath::Parameters params){
+    
     if(!this->checkParams(params)){
         return std::vector<double>(0);
     }
-    const size_t num = this->numberOfElements(params);
+    Dmath::Natural num = Dmath::numberOfElements(params);
+    
+    Dmath::Scalar start  = params.one;
+    Dmath::Scalar stopp  = params.two;
+    Dmath::Scalar stepps = params.three;
 
     std::vector<double> funcVector;
 
@@ -748,12 +755,16 @@ std::vector<double> Dmath::TripleVarFunction::getFunctionVector(double start, do
 
 
 
-std::vector<double> Dmath::TripleVarFunction::getPartialDerivteX(double start, double stopp, double stepps) {
-    Dmath::Parameters params(start, stopp, stepps);
+std::vector<double> Dmath::TripleVarFunction::getPartialDerivteX(Dmath::Parameters params) {
+   
     if (!this->checkParams(params)) {
         return std::vector<double>(0);
     }
-    const size_t num = this->numberOfElements(params);
+
+    Dmath::Natural num = Dmath::numberOfElements(params);
+    Dmath::Scalar start  = params.one;
+    Dmath::Scalar stopp  = params.two;
+    Dmath::Scalar stepps = params.three;
 
     std::vector<double> funcVector;
     funcVector.reserve(num * num * num);
@@ -780,12 +791,16 @@ std::vector<double> Dmath::TripleVarFunction::getPartialDerivteX(double start, d
 }
 
 
-std::vector<double> Dmath::TripleVarFunction::getPartialDerivteY(double start, double stopp, double stepps) {
-    Dmath::Parameters params(start, stopp, stepps);
+std::vector<double> Dmath::TripleVarFunction::getPartialDerivteY(Dmath::Parameters params) {
+
     if (!this->checkParams(params)) {
         return std::vector<double>(0);
     }
-    const size_t num = this->numberOfElements(params);
+
+    Dmath::Natural num = Dmath::numberOfElements(params);
+    Dmath::Scalar start  = params.one;
+    Dmath::Scalar stopp  = params.two;
+    Dmath::Scalar stepps = params.three;
 
     std::vector<double> funcVector;
     funcVector.reserve(num * num * num);
@@ -812,12 +827,15 @@ std::vector<double> Dmath::TripleVarFunction::getPartialDerivteY(double start, d
 }
 
 
-std::vector<double> Dmath::TripleVarFunction::getPartialDerivteZ(double start, double stopp, double stepps) {
-    Dmath::Parameters params(start, stopp, stepps);
+std::vector<double> Dmath::TripleVarFunction::getPartialDerivteZ(Dmath::Parameters params) {
+   
     if (!this->checkParams(params)) {
         return std::vector<double>(0);
     }
-    const size_t num = this->numberOfElements(params);
+    Dmath::Natural num = Dmath::numberOfElements(params);
+    Dmath::Scalar start  = params.one;
+    Dmath::Scalar stopp  = params.two;
+    Dmath::Scalar stepps = params.three;
 
     std::vector<double> funcVector;
     funcVector.reserve(num * num * num);
