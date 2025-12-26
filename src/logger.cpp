@@ -53,7 +53,7 @@ void DEBUG::LOGGER::LOG(std::string info, const char* FILE, int LINE){
 
 void DEBUG::LOGGER::LOG(std::string info){
         
-    std::string logString = "Info: " + info + "\n";
+    std::string logString = "Info:\n " + info + "\n";
     std::cout << logString;
     std::string millis = std::to_string(getMilliseconds());
     std::string exeTime = "\t" + millis + " milliseconds after Logger start\n\n";
