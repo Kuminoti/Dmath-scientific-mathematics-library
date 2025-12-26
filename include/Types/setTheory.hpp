@@ -35,7 +35,7 @@ private: //private methods
 
 
 public:
-    Set() = default;
+    
 
     Set(){ this->arr = new math[capacity];  }
 
