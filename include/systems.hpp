@@ -91,15 +91,15 @@ class CoordinateSystem2D {
 
   void operator++();
    
-    inline double getT()       { return this->t;       }
-    inline double getX()       { return this->X;       }
-    inline double getY()       { return this->Y;       }
-    inline double getAX()      { return this->aX;      }
-    inline double getAY()      { return this->aY;      }   
-    inline double getPhi()     { return this->phi;     }
-    inline double getRadius()  { return this->radius;  }    
-    inline double getOriginX() { return this->originX; }
-    inline double getOriginY() { return this->originY; }
+    inline double getT()       const { return this->t;       }
+    inline double getX()       const { return this->X;       }
+    inline double getY()       const { return this->Y;       }
+    inline double getAX()      const { return this->aX;      }
+    inline double getAY()      const { return this->aY;      }   
+    inline double getPhi()     const { return this->phi;     }
+    inline double getRadius()  const { return this->radius;  }    
+    inline double getOriginX() const { return this->originX; }
+    inline double getOriginY() const { return this->originY; }
 
     inline void setT(double t) { this->t = t; }
 
