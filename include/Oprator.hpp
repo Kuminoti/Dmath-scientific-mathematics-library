@@ -58,7 +58,7 @@
             if constexpr (std::is_same<Func, Dmath::SingleVectorFunction>::value){
                 Dmath::Scalar currentResult = std::sqrt(
                     (func.getXFunc().getDerivativeAt(currentX) * func.getXFunc().getDerivativeAt(currentX)) + 
-                    (func.getYFunc().getDerivativeAt(currentX) * func.getYFunc().getDerivativeAt(currentX)) 
+                    (func.getYFunc().getDerivativeAt(currentX) * func.getYFunc().getDerivativeAt(currentX)) +
                     (func.getZFunc().getDerivativeAT(currentX) * func.getZFunc().getDerivativeAT(currentX))
                     ) * dx;
 
@@ -176,4 +176,4 @@
 
 
 
-#endif //DMATH_EXPERIMATAL_OPERATOR_HPP
+#endif //DMATH_OPERATOR_HPP
