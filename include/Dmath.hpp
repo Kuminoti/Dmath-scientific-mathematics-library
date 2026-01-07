@@ -17,7 +17,7 @@
 #include"complex.hpp"           //complex numbers
 #include"complexFunctions.hpp"
 #include"vectorfunction.hpp"
-
+#include"mathFunctional.hpp"  //Functionals like integrals and sums
 
 
 
