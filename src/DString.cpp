@@ -71,6 +71,50 @@ std::string Dmath::StringHelper::extractFirstWord(const std::string& str) {
     return result;
 }
 
+std::string Dmath::StringHelper::getInBrackets(const std::string& input) {
+
+    if (input.size() < 2)
+        throw std::invalid_argument("String too short");
+
+    // Mapping opening -> closing
+    const std::unordered_map<char, char> brackets = {
+        {'(', ')'},
+        {'<', '>'},
+        {'{', '}'},
+        {'[', ']'}
+    };
+
+    char open = input.front();
+    char close = input.back();
+
+    // Check valid opening bracket
+    if (!brackets.contains(open))
+        throw std::invalid_argument("Invalid opening bracket");
+
+    // Check correct closing bracket
+    if (brackets.at(open) != close)
+        throw std::invalid_argument("Mismatched closing bracket");
+
+    // Extract inner content
+    std::string inner = input.substr(1, input.size() - 2);
+
+    // Check for forbidden brackets inside
+    for (char c : inner) {
+        if (brackets.contains(c) ||
+            std::ranges::any_of(brackets,
+                [&](const auto& p) { return c == p.second; }))
+        {
+            throw std::invalid_argument("Nested or mixed brackets are not allowed");
+        }
+    }
+
+    return inner;
+}
+
+
+
+
+
 std::string Dmath::StringHelper::extractFromTo(const std::string& mainString, char start, char end) {
     std::string stringExtract = "";
     if(!this->exsitsInC(mainString, start) || !this->exsitsInC(mainString, end)){
