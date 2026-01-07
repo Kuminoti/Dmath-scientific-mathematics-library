@@ -135,19 +135,19 @@
         return Dmath::roundTo(result,ROUNDING_VALUE);
     }
 
+    SHARED_LIB Dmath::Scalar surfaceOfRotation(Dmath::Parameters params, Dmath::SingleVarFunction func);
+
+    SHARED_LIB Dmath::Scalar volumeOfRotation(Dmath::Parameters params, Dmath::SingleVarFunction func);
+
 
     template<typename Field>
-
     Dmath::Scalar LoopIntegral3D(Dmath::Parameters params, Field fiels){}
     #pragma endregion //IntegralOperators
 
     #pragma region DifferentialOperators
     
     
-    
-
-
-
+ 
 
  
     

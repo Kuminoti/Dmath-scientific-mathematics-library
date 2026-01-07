@@ -45,6 +45,62 @@ Dmath::Scalar Dmath::loopIntegralSecondKind2D(Dmath::Parameters params, Dmath::S
     }
 
 
+
+
+    Dmath::Scalar Dmath::surfaceOfRotation(Dmath::Parameters params, Dmath::SingleVarFunction func){
+        if(!Dmath::checkParams(params)){
+            std::cerr << "Error Wrong Parameters Error code: " << Dmath::ERROR_CODE::WRONG_PARAMETER << std::endl;
+            return 0;
+        }
+
+        const Dmath::Natural a = static_cast<size_t>(params.one);
+        const Dmath::Natural b = static_cast<size_t>(params.two);
+        const Dmath::Scalar dx = params.three;
+
+        Dmath::Scalar sum = 0;
+
+        Dmath::Natural num = Dmath::numberOfElements(params);
+
+        for(size_t i = 0; i < num; i++){
+            Dmath::Scalar currentX = a + i * dx;
+
+            Dmath::Scalar currentResult = 2 * PI * func(currentX) * std::sqrt(1 + (func.getDerivativeAt(currentX) * func.getDerivativeAt(currentX))) * dx;
+
+            sum += currentResult;
+        }
+
+        return Dmath::roundTo(sum, ROUNDING_VALUE);
+    }
+
+
+    Dmath::Scalar Dmath::volumeOfRotation(Dmath::Parameters params, Dmath::SingleVarFunction func){
+        if(!Dmath::checkParams(params)){
+            std::cerr << "Error Wrong Parameters Error code: " << Dmath::ERROR_CODE::WRONG_PARAMETER << std::endl;
+            return 0;
+        }
+
+        const Dmath::Natural a = static_cast<size_t>(params.one);
+        const Dmath::Natural b = static_cast<size_t>(params.two);
+        const Dmath::Scalar dx = params.three;
+
+        Dmath::Scalar sum = 0;
+
+        Dmath::Natural num = Dmath::numberOfElements(params);
+
+        for(size_t i = 0; i < num; i++){
+            Dmath::Scalar currentX = a + i * dx;
+
+            Dmath::Scalar currentResult = PI * (func(currentX) * func(currentX)) * dx;
+
+            sum += currentResult;
+        }
+
+        return Dmath::roundTo(sum, ROUNDING_VALUE);
+    }
+
+
+
+
 Dmath::Scalar Dmath::sumOverS(Dmath::Parameters param, Dmath::SingleVarFunction func){
     if (!Dmath::checkParams(param)){
         std::cerr << "ERROR: Wrong parameters\nError code: " << Dmath::ERROR_CODE::WRONG_PARAMETER << std::endl;
