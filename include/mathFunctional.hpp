@@ -96,7 +96,13 @@ public:
             this->functionType = TRIPLE;
         }
         else if(std::is_same<typename funcTraid::Arg2, Dmath::SingleVectorFunction>::value){
-            this->functionType = TRIPLE;
+            this->functionType = VEC_SINGLE;
+        }
+        else if(std::is_same<typename funcTraid::Arg2, Dmath::DoubleVectorFunction>::value){
+            this->functionType = VEC_DOUBLE;
+        }
+        else if(std::is_same<typename funcTraid::Arg2, Dmath::TripleVectorFunction>::value){
+            this->functionType = VEC_TRIPLE;
         }
         else{ this->functionType = UNKNOWEN; }
 
