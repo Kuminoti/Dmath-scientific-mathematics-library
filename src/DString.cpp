@@ -71,44 +71,55 @@ std::string Dmath::StringHelper::extractFirstWord(const std::string& str) {
     return result;
 }
 
-std::string Dmath::StringHelper::getInBrackets(const std::string& input) {
+std::string Dmath::StringHelper::getInBrackets(const std::string& s) {
 
-    if (input.size() < 2)
-        throw std::invalid_argument("String too short");
-
-    // Mapping opening -> closing
-    const std::unordered_map<char, char> brackets = {
+    static const std::unordered_map<char, char> brackets{
         {'(', ')'},
-        {'<', '>'},
+        {'[', ']'},
         {'{', '}'},
-        {'[', ']'}
+        {'<', '>'}
     };
 
-    char open = input.front();
-    char close = input.back();
+    if (s.size() < 2)
+        throw std::invalid_argument("String too short");
 
-    // Check valid opening bracket
-    if (!brackets.contains(open))
-        throw std::invalid_argument("Invalid opening bracket");
+    char open = s.front();
 
-    // Check correct closing bracket
-    if (brackets.at(open) != close)
-        throw std::invalid_argument("Mismatched closing bracket");
+    // C++17 replacement for contains()
+    auto it = brackets.find(open);
+    if (it == brackets.end())
+        throw std::invalid_argument("No opening bracket");
 
-    // Extract inner content
-    std::string inner = input.substr(1, input.size() - 2);
+    char close = it->second;
 
-    // Check for forbidden brackets inside
-    for (char c : inner) {
-        if (brackets.contains(c) ||
-            std::ranges::any_of(brackets,
-                [&](const auto& p) { return c == p.second; }))
-        {
-            throw std::invalid_argument("Nested or mixed brackets are not allowed");
+    int depth = 0;
+    size_t start = std::string::npos;
+
+    for (size_t i = 0; i < s.size(); ++i) {
+        char c = s[i];
+
+        if (c == open) {
+            if (depth == 0)
+                start = i + 1;
+            ++depth;
+        }
+        else if (c == close) {
+            --depth;
+            if (depth == 0)
+                return s.substr(start, i - start);
+        }
+        else {
+            // reject mismatched brackets
+            if (brackets.find(c) != brackets.end() ||
+                std::any_of(brackets.begin(), brackets.end(),
+                    [c](const auto& p) { return p.second == c; }))
+            {
+                throw std::invalid_argument("Mismatched brackets");
+            }
         }
     }
 
-    return inner;
+    throw std::invalid_argument("Unclosed bracket");
 }
 
 

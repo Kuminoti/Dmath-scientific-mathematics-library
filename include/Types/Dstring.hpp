@@ -5,6 +5,8 @@
 
 #include"../dataTypes.hpp"
 #include<unordered_map>
+#include<stdexcept>
+#include<algorithm>
 
 NAMESPACESTART
 
