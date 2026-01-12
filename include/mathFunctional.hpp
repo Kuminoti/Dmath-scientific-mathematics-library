@@ -108,36 +108,12 @@ public:
 
     }
 
- template<typename Func,
-    typename = std::enable_if_t<
-        std::is_same_v<Func, Dmath::SingleVarFunction> ||
-        std::is_same_v<Func, Dmath::DoubleVarFunction> ||
-        std::is_same_v<Func, Dmath::TripleVarFunction> 
-        
-        >>
-    Dmath::Scalar operator()(Func func){
-
-        /* For example the operator is an arclenght-integral and the
-         * function is a continuous and differentiable.
-         * the parameters contains the integration limits and
-         * the "size" of the diffrential dx (step size)
-        */ 
-        return this->functionalOperator(this->params, func);
-    }
-
-    template<typename Func,
-    typename = std::enable_if_t<std::is_same_v<Func, Dmath::SingleVectorFunction>
-        >>
-    Dmath::Vec3D operator()(Func func){
-
-        /* For example the operator is an arclenght-integral and the
-         * function is a continuous and differentiable.
-         * the parameters contains the integration limits and
-         * the "size" of the diffrential dx (step size)
-        */ 
-        return this->functionalOperator(this->params, func);
-    }
-
+   template<typename Func>
+auto operator()(Func func)
+    -> decltype(this->functionalOperator(this->params, func))
+{
+    return this->functionalOperator(this->params, func);
+}
 
 
     void setFunctionalOperator(OP funcOP){

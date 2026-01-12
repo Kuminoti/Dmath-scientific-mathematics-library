@@ -56,20 +56,23 @@
         for(size_t i = 0; i < num; i++){
             Dmath::Scalar currentX = a + i * dx;
             if constexpr (std::is_same<Func, Dmath::SingleVectorFunction>::value){
+                Dmath::SingleVarFunction xOfT = func.getXFunc();
+                Dmath::SingleVarFunction yOfT = func.getYFunc();
+                Dmath::SingleVarFunction zOfT = func.getZFunc();
                 Dmath::Scalar currentResult = std::sqrt(
-                    (func.getXFunc().getDerivativeAt(currentX) * func.getXFunc().getDerivativeAt(currentX)) + 
-                    (func.getYFunc().getDerivativeAt(currentX) * func.getYFunc().getDerivativeAt(currentX)) +
-                    (func.getZFunc().getDerivativeAT(currentX) * func.getZFunc().getDerivativeAT(currentX))
+                    (xOfT.getDerivativeAt(currentX) * xOfT.getDerivativeAt(currentX)) + 
+                    (yOfT.getDerivativeAt(currentX) * yOfT.getDerivativeAt(currentX)) +
+                    (zOfT.getDerivativeAt(currentX) * zOfT.getDerivativeAt(currentX))
                     ) * dx;
 
                 sum += currentResult;
                 continue;
             }
-            Dmath::Scalar currentResult = std::sqrt(1 + (func.getDerivativeAt(currentX) * func.getDerivativeAt(currentX))) * dx;
-            sum += currentResult;
-            
+            else if constexpr(std::is_same<Func, Dmath::SingleVarFunction>::value){
+                Dmath::Scalar currentResult = std::sqrt(1 + (func.getDerivativeAt(currentX) * func.getDerivativeAt(currentX))) * dx;
+                sum += currentResult;
+            }
         }
-
         return sum;
     }
 
