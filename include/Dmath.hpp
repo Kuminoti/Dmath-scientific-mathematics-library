@@ -3,6 +3,15 @@
 #ifndef DMATH_H
 #define DMATH_H
 
+/* File: Dmath.hpp
+ * Description: This is the main include file for the Dmath library.
+ * License: MIT
+ * 
+ * GitHub: https://github.com/Kuminoti
+ * 
+*/
+#define KNOWEN_LINES_OF_CODE 8555
+
 
 #include"Types/dMap.hpp"
 #include"Types/Dstring.hpp"
