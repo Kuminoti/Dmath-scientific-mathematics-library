@@ -1,19 +1,24 @@
 #include "../include/vectorfunction.hpp"
 #pragma region single
 
-Dmath::SingleVectorFunction::SingleVectorFunction(Dmath::SingleVarFunction xOfT, Dmath::SingleVarFunction yOfT){
-    this->xOfT = xOfT;
-    this->yOfT = yOfT;
-    this->zOfT = [](double t){ return 0; };
-    
-}
+Dmath::SingleVectorFunction::SingleVectorFunction(
+    const Dmath::SingleVarFunction& x,
+    const Dmath::SingleVarFunction& y
+)
+    : xOfT(x),
+      yOfT(y),
+      zOfT([](double){ return 0.0; })
+{}
 
-Dmath::SingleVectorFunction::SingleVectorFunction(Dmath::SingleVarFunction xOfT, Dmath::SingleVarFunction yOfT, Dmath::SingleVarFunction zOfT){
-    this->xOfT = xOfT;
-    this->yOfT = yOfT;
-    this->zOfT = zOfT;
-    
-}
+Dmath::SingleVectorFunction::SingleVectorFunction(
+    const Dmath::SingleVarFunction& x,
+    const Dmath::SingleVarFunction& y,
+    const Dmath::SingleVarFunction& z
+)
+    : xOfT(x),
+      yOfT(y),
+      zOfT(z)
+{}
 
 Dmath::Vec2D Dmath::SingleVectorFunction::call2D(Dmath::Scalar t){
     return Dmath::Vec2D(xOfT(t), yOfT(t));

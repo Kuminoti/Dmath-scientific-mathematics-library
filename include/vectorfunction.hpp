@@ -27,7 +27,7 @@ NAMESPACESTART
 
 #pragma region Single
 
-class SingleVectorFunction{
+class SHARED_LIB SingleVectorFunction{
 
 private: //Private Members
 
@@ -41,10 +41,10 @@ public: //Public constructors
     SingleVectorFunction() = default;
 
     //constructor for a 2D vectorFunction
-    SingleVectorFunction(Dmath::SingleVarFunction xOfT, Dmath::SingleVarFunction yOfT);
+    SingleVectorFunction(const Dmath::SingleVarFunction& xOfT,const Dmath::SingleVarFunction& yOfT);
 
     //constructor for a 3D vectorFunction
-    SingleVectorFunction(Dmath::SingleVarFunction xOfT, Dmath::SingleVarFunction yOfT, Dmath::SingleVarFunction zOfT);
+    SingleVectorFunction(const Dmath::SingleVarFunction& xOfT,const Dmath::SingleVarFunction& yOfT, const Dmath::SingleVarFunction& zOfT);
    
     Dmath::Vec2D call2D(Dmath::Scalar t);
     
@@ -77,7 +77,7 @@ public: //Public constructors
 #pragma endregion //single 
 
 #pragma region Double
-class DoubleVectorFunction{
+class SHARED_LIB DoubleVectorFunction{
 private:
     Dmath::DoubleVarFunction xOfUV;
     Dmath::DoubleVarFunction yOfUV;
@@ -143,7 +143,7 @@ public:
 
 #pragma region Triple
 
-class TripleVectorFunction{
+class SHARED_LIB TripleVectorFunction{
   private:
     Dmath::TripleVarFunction xOfUVW;
     Dmath::TripleVarFunction yOfUVW;
