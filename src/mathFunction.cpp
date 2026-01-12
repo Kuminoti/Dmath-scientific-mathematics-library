@@ -35,7 +35,7 @@ size_t Dmath::SingleVarFunction::numOfElements(Dmath::Parameters param){
 }
 
 
-Dmath::SingleVarFunction  Dmath::SingleVarFunction::operator+ ( Function funcOne){
+Dmath::SingleVarFunction  Dmath::SingleVarFunction::operator+ ( Function funcOne) const {
     Dmath::SingleVarFunction lhs = *this;
     Dmath::Function rhs = funcOne;
 
@@ -50,7 +50,7 @@ Dmath::SingleVarFunction  Dmath::SingleVarFunction::operator+ ( Function funcOne
 
 
 
-Dmath::SingleVarFunction  Dmath::SingleVarFunction::operator- ( Function funcOne){
+Dmath::SingleVarFunction  Dmath::SingleVarFunction::operator- ( Function funcOne) const{
     Dmath::SingleVarFunction lhs = *this;
     Dmath::Function rhs = funcOne;
 
@@ -65,7 +65,7 @@ Dmath::SingleVarFunction  Dmath::SingleVarFunction::operator- ( Function funcOne
 
 
 
-Dmath::SingleVarFunction  Dmath::SingleVarFunction::operator* ( Function funcOne){
+Dmath::SingleVarFunction  Dmath::SingleVarFunction::operator* ( Function funcOne) const {
     Dmath::SingleVarFunction lhs = *this;
     Dmath::Function rhs = funcOne;
 
@@ -78,7 +78,7 @@ Dmath::SingleVarFunction  Dmath::SingleVarFunction::operator* ( Function funcOne
     return func;
 }
 
-Dmath::SingleVarFunction  Dmath::SingleVarFunction::operator/ ( Function funcOne){
+Dmath::SingleVarFunction  Dmath::SingleVarFunction::operator/ ( Function funcOne) const {
     Dmath::SingleVarFunction lhs = *this;
     Dmath::Function rhs = funcOne;
 
@@ -98,7 +98,7 @@ Dmath::SingleVarFunction  Dmath::SingleVarFunction::operator/ ( Function funcOne
 //For function compsition f(g(x))
 
 
-Dmath::SingleVarFunction Dmath::SingleVarFunction::operator+(Dmath::SingleVarFunction funcOne){
+Dmath::SingleVarFunction Dmath::SingleVarFunction::operator+(Dmath::SingleVarFunction funcOne) const {
     Dmath::SingleVarFunction lhs = *this;
     Dmath::SingleVarFunction rhs = funcOne;
 
@@ -111,7 +111,7 @@ Dmath::SingleVarFunction Dmath::SingleVarFunction::operator+(Dmath::SingleVarFun
 }
 
 
-Dmath::SingleVarFunction Dmath::SingleVarFunction::operator-(Dmath::SingleVarFunction funcOne){
+Dmath::SingleVarFunction Dmath::SingleVarFunction::operator-(Dmath::SingleVarFunction funcOne) const {
         
     auto sub = [this,funcOne](double x) mutable ->double {
         return ( this->funcBase->Callx(x) - funcOne(x));
@@ -122,7 +122,7 @@ Dmath::SingleVarFunction Dmath::SingleVarFunction::operator-(Dmath::SingleVarFun
 }
 
 
-Dmath::SingleVarFunction Dmath::SingleVarFunction::operator*(Dmath::SingleVarFunction funcOne) {
+Dmath::SingleVarFunction Dmath::SingleVarFunction::operator*(Dmath::SingleVarFunction funcOne) const {
     Dmath::SingleVarFunction lhs = *this;
     Dmath::SingleVarFunction rhs = funcOne;
 
@@ -135,7 +135,7 @@ Dmath::SingleVarFunction Dmath::SingleVarFunction::operator*(Dmath::SingleVarFun
 
 
 
-Dmath::SingleVarFunction Dmath::SingleVarFunction::operator/(Dmath::SingleVarFunction funcOne){
+Dmath::SingleVarFunction Dmath::SingleVarFunction::operator/(Dmath::SingleVarFunction funcOne)const {
         
     auto div = [this,funcOne](double x) mutable ->double {
         return ( this->funcBase->Callx(x) / funcOne(x));
@@ -145,7 +145,7 @@ Dmath::SingleVarFunction Dmath::SingleVarFunction::operator/(Dmath::SingleVarFun
     return func;
 }
 
-Dmath::SingleVarFunction Dmath::SingleVarFunction::composition(Dmath::SingleVarFunction fOfX, Dmath::SingleVarFunction gOfX){
+Dmath::SingleVarFunction Dmath::SingleVarFunction::composition(Dmath::SingleVarFunction fOfX, Dmath::SingleVarFunction gOfX) const {
 
     auto comp = [fOfX, gOfX](double x) mutable ->double {
 
@@ -160,7 +160,7 @@ Dmath::SingleVarFunction Dmath::SingleVarFunction::composition(Dmath::SingleVarF
     return func;
 }
 
-Dmath::SingleVarFunction Dmath::SingleVarFunction::compose(Dmath::SingleVarFunction func){
+Dmath::SingleVarFunction Dmath::SingleVarFunction::compose(Dmath::SingleVarFunction func) const {
     auto mainFunc = *this;
      auto comp = [func, mainFunc](double x) mutable ->double {
         return mainFunc(func(x));
@@ -177,7 +177,7 @@ double Dmath::SingleVarFunction::operator()(double x)  const{
 
 
 
-Dmath::SingleVarFunction Dmath::SingleVarFunction::operator+(Dmath::Scalar num){
+Dmath::SingleVarFunction Dmath::SingleVarFunction::operator+(Dmath::Scalar num) const {
     auto add = [this, num](double x) mutable ->double { 
         return (this->funcBase->Callx(x) + num);
     };

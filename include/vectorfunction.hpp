@@ -60,9 +60,9 @@ public: //Public constructors
     SingleVectorFunction crossProduct(SingleVectorFunction funcTwo);
     //Getters:
 
-    Dmath::SingleVarFunction getXFunc(){ return this->xOfT;    }
-    Dmath::SingleVarFunction getYFunc(){ return this->yOfT;    }
-    Dmath::SingleVarFunction getZFunc(){ return this->zOfT;    }
+    const Dmath::SingleVarFunction& getXFunc(){ return this->xOfT;    }
+    const Dmath::SingleVarFunction& getYFunc(){ return this->yOfT;    }
+    const Dmath::SingleVarFunction& getZFunc(){ return this->zOfT;    }
 
 
     //Call the functions
@@ -89,7 +89,7 @@ public:
 
     
 
-    DoubleVectorFunction(Dmath::DoubleVarFunction xOfUV, Dmath::DoubleVarFunction yOfUV, Dmath::DoubleVarFunction zOfUV);
+    DoubleVectorFunction(const Dmath::DoubleVarFunction& xOfUV, const Dmath::DoubleVarFunction& yOfUV, const Dmath::DoubleVarFunction& zOfUV);
 
     Dmath::Vec3D operator ()(Dmath::Scalar U, Dmath::Scalar V);
     Dmath::Vec3D operator ()(Dmath::Vec2D vec);

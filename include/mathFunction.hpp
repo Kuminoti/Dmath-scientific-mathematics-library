@@ -318,24 +318,24 @@ SingleVarFunction(SingleVarFunction&& other) noexcept
     
     
     
-    SingleVarFunction operator+ ( Function funcOne);
-    SingleVarFunction operator- ( Function funcOne);
-    SingleVarFunction operator* ( Function funcOne);
-    SingleVarFunction operator/ ( Function funcOne);
+    SingleVarFunction operator+ ( Function funcOne) const;
+    SingleVarFunction operator- ( Function funcOne) const;
+    SingleVarFunction operator* ( Function funcOne) const;
+    SingleVarFunction operator/ ( Function funcOne) const;
     
     
-    SingleVarFunction operator+ (SingleVarFunction funcOne);
-    SingleVarFunction operator- (SingleVarFunction funcOne);
-    SingleVarFunction operator* (SingleVarFunction funcOne);
-    SingleVarFunction operator/ (SingleVarFunction funcOne);
+    SingleVarFunction operator+ (SingleVarFunction funcOne) const;
+    SingleVarFunction operator- (SingleVarFunction funcOne) const;
+    SingleVarFunction operator* (SingleVarFunction funcOne) const;
+    SingleVarFunction operator/ (SingleVarFunction funcOne) const;
 
-    SingleVarFunction operator+ (Dmath::Scalar num);
+    SingleVarFunction operator+ (Dmath::Scalar num) const;
 
     /* Nests one function in an other, for example:
      * (f * g)(x) := f(g(x))
     */
-    SingleVarFunction composition(SingleVarFunction fOfX, SingleVarFunction gOfX);
-    SingleVarFunction compose(SingleVarFunction func);
+    SingleVarFunction composition(SingleVarFunction fOfX, SingleVarFunction gOfX) const;
+    SingleVarFunction compose(SingleVarFunction func) const;
 
     /*
         * This method, getFunctionVector, returns a vector filled with all function values

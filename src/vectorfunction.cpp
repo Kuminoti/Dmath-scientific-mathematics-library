@@ -127,12 +127,9 @@ Dmath::Vec3D Dmath::DoubleVectorFunction::operator ()(Dmath::Vec2D vec){
 }
 
 
-Dmath::DoubleVectorFunction::DoubleVectorFunction(Dmath::DoubleVarFunction xOfUV, Dmath::DoubleVarFunction yOfUV, Dmath::DoubleVarFunction zOfUV){
-    this->xOfUV = xOfUV;
-    this->yOfUV = yOfUV;
-    this->zOfUV = zOfUV;
-
-}
+Dmath::DoubleVectorFunction::DoubleVectorFunction(const Dmath::DoubleVarFunction& xOfUV, const Dmath::DoubleVarFunction& yOfUV, const Dmath::DoubleVarFunction& zOfUV)
+      :xOfUV(xOfUV), yOfUV(yOfUV), zOfUV(zOfUV) {}
+      
 Dmath::DoubleVectorFunction Dmath::DoubleVectorFunction::operator+(Dmath::DoubleVectorFunction funcTwo){
     Dmath::DoubleVarFunction thisX = this->getXFunc();
     Dmath::DoubleVarFunction thisY = this->getYFunc();
