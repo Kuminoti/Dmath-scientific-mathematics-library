@@ -110,6 +110,34 @@ std::string Dmath::DmathFile::getDmathTemplate() const {
 }
 
 
+std::string Dmath::DmathFile::getFunctionString (std::string line){
+
+    // Muss mit "Function:" beginnen
+    if (line.find("Function:") != 0)
+        std::cerr << "Not a function line" << std::endl;
+
+    // Positionen
+    size_t nameStart = line.find(':') + 1;
+    size_t exprStart = line.find('<');
+    size_t exprEnd   = line.find('>');
+
+    if (exprStart == std::string::npos || exprEnd == std::string::npos)
+        std::cerr << "Malformed function line" << std::endl;
+
+    // f(x)
+    std::string functionHead = line.substr(nameStart, exprStart - nameStart);
+    trim(functionHead);
+
+    // Ausdruck
+    std::string expression = line.substr(exprStart + 1, exprEnd - exprStart - 1);
+    trim(expression);
+
+    // Ergebnis
+    return functionHead + " = " + expression;
+}
+
+
+
 void Dmath::DmathFile::insertIntoBlock(const std::string& text) {
 
     size_t open = content.find("<{");
