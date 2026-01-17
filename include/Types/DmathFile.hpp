@@ -30,6 +30,14 @@ struct FileElement {
     Data_Type_File type;
     T data;
 };
+
+inline void trim(std::string& s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(),
+        [](unsigned char ch){ return !std::isspace(ch); }));
+    s.erase(std::find_if(s.rbegin(), s.rend(),
+        [](unsigned char ch){ return !std::isspace(ch); }).base(), s.end());
+}
+
 Dmath::Trio<std::string, std::string, std::string>
 functionData(const std::string& FunctionString);
 // ============================================================================
@@ -70,6 +78,30 @@ public: //adders
     void saveToFile(const std::string& path) const;
 
 
+     std::vector<std::string> extractFunctions() {
+        std::vector<std::string> functions;
+        std::istringstream stream(this->content);
+        std::string line;
+
+    while (std::getline(stream, line)) {
+        // Entferne führende Leerzeichen
+        Dmath::trim(line);
+
+        if (line.rfind("Function:", 0) == 0) {
+            try {
+                functions.push_back(getFunctionString(line));
+            }
+            catch (...) {
+                // Ungültige Funktionszeile → ignorieren oder loggen
+            }
+        }
+    }
+
+    return functions;
+}
+
+
+
 
 private: //private getters and setters
     // ------------------------------------------------------------------------
@@ -90,6 +122,9 @@ private: //private getters and setters
 
 
 
+   
+
+    std::string getFunctionString (std::string functionName);
 
 public: //Template functions
     // ------------------------------------------------------------------------

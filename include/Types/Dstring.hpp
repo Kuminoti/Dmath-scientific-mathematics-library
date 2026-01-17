@@ -7,6 +7,7 @@
 #include<unordered_map>
 #include<stdexcept>
 #include<algorithm>
+#include <sstream>
 
 NAMESPACESTART
 
