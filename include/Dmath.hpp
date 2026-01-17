@@ -11,7 +11,7 @@
  * 
 */
 #define KNOWEN_LINES_OF_CODE 8555
-
+#define VERSION = "1.0"
 
 #include"Types/dMap.hpp"
 #include"Types/Dstring.hpp"
