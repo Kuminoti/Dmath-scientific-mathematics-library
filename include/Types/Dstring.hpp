@@ -22,6 +22,8 @@ public:
     bool isNumeric(const std::string& str);
 
     size_t howOften(const std::string& mainString, const std::string& find);
+    size_t getFirstTopLevelPosition(const std::string& str, char target);
+
 
     Dmath::Duo<std::string, std::string> splitString(std::string mainString, size_t position);
 
@@ -41,16 +43,9 @@ public:
 
     //File operations
     std::string getFileExtension(const std::string& filename);
-    std::string removeWhitespace(const std::string& str){
-    std::string result;
-    result.reserve(str.size()); // Performance-Optimierung
-
-    for (char c : str)
-        if (!std::isspace(static_cast<unsigned char>(c)))
-            result.push_back(c);
-
-    return result;
-}
+    
+    //removers
+    std::string removeWhitespace(const std::string& str);
     
 };
 

@@ -266,3 +266,32 @@ std::string  Dmath::StringHelper::getFileExtension(const std::string& filename) 
     }
     return filename.substr(pos);  // inkl. Punkt, z.B. ".exe"
 }
+
+
+
+std::string Dmath::StringHelper::removeWhitespace(const std::string& str){
+    std::string result;
+    result.reserve(str.size()); // Performance-Optimierung
+
+    for (char c : str)
+        if (!std::isspace(static_cast<unsigned char>(c)))
+            result.push_back(c);
+
+    return result;
+}
+
+
+size_t Dmath::StringHelper::getFirstTopLevelPosition(const std::string& str, char target) {
+    int depth = 0;
+
+    for (size_t i = 0; i < str.size(); ++i) {
+        char c = str[i];
+
+        if (c == '(' || c == '[' || c == '{') depth++;
+        else if (c == ')' || c == ']' || c == '}') depth--;
+        else if (c == target && depth == 0)
+            return i;
+    }
+
+    return std::string::npos;
+}
