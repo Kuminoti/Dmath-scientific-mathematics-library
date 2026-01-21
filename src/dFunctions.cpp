@@ -317,3 +317,31 @@ double Dmath::psiToBar(double psi) {
  double Dmath::barToPsi(double bar) {
     return bar * BAR_TO_PSI;
 }
+
+
+
+
+
+
+std::string Dmath::getCurrentDate()
+{
+    using namespace std::chrono;
+
+    auto now = system_clock::now();
+    std::time_t time = system_clock::to_time_t(now);
+
+    std::tm tm{};
+#ifdef _WIN32
+    localtime_s(&tm, &time);
+#else
+    localtime_r(&time, &tm);
+#endif
+
+    std::ostringstream oss;
+    oss << std::setfill('0')
+        << std::setw(2) << tm.tm_mday << "."
+        << std::setw(2) << (tm.tm_mon + 1) << "."
+        << (tm.tm_year + 1900);
+
+    return oss.str();
+}

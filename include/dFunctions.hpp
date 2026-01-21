@@ -6,6 +6,10 @@
 #include"dataTypes.hpp" 
 #include<random>
 #include<limits>
+#include<chrono>
+#include <ctime>
+#include <iomanip>
+#include <sstream>
 
 
 NAMESPACESTART
@@ -117,7 +121,7 @@ SHARED_LIB double radiansToDegrees(double radiants);
 SHARED_LIB double degreesToRadians(double degrees);
 
 
-
+SHARED_LIB std::string getCurrentDate();
 
 SHARED_LIB double fDotProduct(Dmath::sVec2f vecOne, Dmath::sVec2f);
 
