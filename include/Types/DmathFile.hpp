@@ -59,6 +59,11 @@ public:
 
 
 public: //BinaryOperations
+
+/* Writes the current Dmath data to a binary file at the specified path. 
+ * The method takes a constant reference to a std::string representing the
+ * file path where the binary data will be saved
+ */
     void writeDmathBinary(const std::string& path);
     std::string readDmathBinary(const std::string& path);
 

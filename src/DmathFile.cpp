@@ -53,7 +53,7 @@ Dmath::DmathFile::DmathFile() {
 }
 
 
-
+//
 void Dmath::DmathFile::writeDmathBinary(const std::string& path) {
     std::ofstream out(path, std::ios::binary);
     if (!out)
