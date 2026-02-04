@@ -217,7 +217,7 @@ Dmath::DmathFile Dmath::DmathFile::loadTextFile(const std::string &path){
     std::string content = "";
     std::string line;
     while (getline(file, line)) {
-        content+= line; 
+        content += line + "\n";
     }
 
     // Close the file

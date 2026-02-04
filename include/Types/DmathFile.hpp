@@ -83,14 +83,14 @@ public: //adders
     void saveToFile(const std::string& path) const;
 
 
-     std::vector<std::string> extractFunctions() {
+    std::vector<std::string> extractFunctions() {
         std::vector<std::string> functions;
         std::istringstream stream(this->content);
         std::string line;
 
     while (std::getline(stream, line)) {
         // Entferne führende Leerzeichen
-        Dmath::trim(line);
+        trim(line);
 
         if (line.rfind("Function:", 0) == 0) {
             try {
@@ -105,7 +105,11 @@ public: //adders
     return functions;
 }
 
-
+static DmathFile loadFromFile(const std::string& path) {
+    DmathFile file;
+    
+    return file.loadTextFile(path);
+}
 
 
 private: //private getters and setters
