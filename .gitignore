@@ -29,7 +29,7 @@ include/Tensor.hpp
 
 
 Tensor/
-bivector.hpp
+FLORA/
 bivector.cpp
 analyser/
 experimental/
