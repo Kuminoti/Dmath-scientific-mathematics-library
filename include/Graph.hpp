@@ -35,7 +35,11 @@ public: //Public main methods
 
     void plotVector(Dmath::Vec2D vec, Dmath::Scalar scale = 50.0, RGB color = RGB{255,0,0});
 
+    void plotVectorField(Dmath::DoubleVectorFunction& vectorField, Dmath::Scalar gap = 50, RGB color = RGB{0,0,255});
+
     void drawLine(int x0, int y0, int x1, int y1, RGB color);
+
+    
 
 private:
 

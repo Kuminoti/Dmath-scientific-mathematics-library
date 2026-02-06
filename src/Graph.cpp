@@ -27,45 +27,39 @@ void Dmath::Plotter::plotCurve(Dmath::SingleVectorFunction& curve, Dmath::Scalar
 }
 
 
-void Dmath::Plotter::plotVector(Dmath::Vec2D vec, Dmath::Scalar scale, RGB color) {
-    // Zielkoordinaten in Pixel
-    int px = (int)cx + (int)(vec.getX() * scale) + vec.getOriginX() * scale;
-    int py = (int)cy - (int)(vec.getY() * scale) - vec.getOriginY() * scale; 
+void Dmath::Plotter::plotVector(Dmath::Vec2D vec, double scale, RGB color) {
+    int ox = (int)vec.getOriginX();
+    int oy = (int)vec.getOriginY(); // Pixel-Rasterpunkt
+    double vx = vec.getX() * scale;
+    double vy = vec.getY() * scale;
 
-    // Linie vom Ursprung zum Endpunkt
-    int steps = 100;
-    for (int i = 0; i <= steps; i++) {
-        int stepX = (int)(vec.getX() * scale * i / steps) + vec.getOriginX() * scale;
-        int stepY = (int)(vec.getY() * scale * i / steps) + vec.getOriginY() * scale;
-        setPixel((int)cx + stepX, (int)cy - stepY, color);
-    }
+    // Endpunkt des Pfeils
+    int ex = ox + (int)vx;
+    int ey = oy - (int)vy; // Pixel-Y nach oben invertiert
 
-    // --- arrow tip ---
-    double dx = px - (int)cx;
-    double dy = py - (int)cy;
-    double len = std::sqrt(dx*dx + dy*dy);
+    // Linie zeichnen
+    drawLine(ox, oy, ex, ey, color);
+
+    // Pfeilspitze berechnen
+    double len = std::sqrt(vx*vx + vy*vy);
     if(len == 0) return;
 
-    double ux = dx / len;
-    double uy = dy / len;
+    double ux = vx / len;
+    double uy = vy / len;
+    double arrowLength = 5.0;
+    double arrowAngle = PI/6;
 
-    double arrowLength = 5.0;      // Länge der Pfeilspitze in Pixel
-    double arrowAngle  = PI / 6;  // Winkel der Spitze (30 Grad)
+    int lx = (int)(ex - ux * arrowLength * std::cos(arrowAngle) + uy * arrowLength * std::sin(arrowAngle));
+    int ly = (int)(ey + ux * arrowLength * std::sin(arrowAngle) + uy * arrowLength * std::cos(arrowAngle));
 
-    // Linke Spitze
-    int lx = (int)(-ux * arrowLength * std::cos(arrowAngle) + uy * arrowLength * std::sin(arrowAngle));
-    int ly = (int)(-uy * arrowLength * std::cos(arrowAngle) - ux * arrowLength * std::sin(arrowAngle));
+    int rx = (int)(ex - ux * arrowLength * std::cos(arrowAngle) - uy * arrowLength * std::sin(arrowAngle));
+    int ry = (int)(ey - ux * arrowLength * std::sin(arrowAngle) + uy * arrowLength * std::cos(arrowAngle));
 
-    // Rechte Spitze
-    int rx = (int)(-ux * arrowLength * std::cos(arrowAngle) - uy * arrowLength * std::sin(arrowAngle));
-    int ry = (int)(-uy * arrowLength * std::cos(arrowAngle) + ux * arrowLength * std::sin(arrowAngle));
-
-    // Zeichne die Pfeilspitze
-    drawLine(px, py, px + lx, py + ly, color);
-    drawLine(px, py, px + rx, py + ry, color);
+    drawLine(ex, ey, lx, ly, color);
+    drawLine(ex, ey, rx, ry, color);
 
     // Endpunkt selbst
-    setPixel(px, py, color);
+    setPixel(ex, ey, color);
 }
 
 // Hilfsfunktion zum Zeichnen von Linien (Bresenham)
@@ -83,6 +77,40 @@ void Dmath::Plotter::drawLine(int x0, int y0, int x1, int y1, RGB color) {
     }
 }
 
+
+
+void Dmath::Plotter::plotVectorField(Dmath::DoubleVectorFunction& vectorField, Dmath::Scalar step, RGB color) {
+    const double arrowLength = 15.0;      // Länge in Pixeln
+    const double unitPerPixel = 50.0;     // Skalierung mathematisch -> Pixel
+
+    for(int px = 0; px < (int)width; px += (int)step){
+        for(int py = 0; py < (int)height; py += (int)step){
+            
+            // Pixel -> Mathematische Koordinaten
+            double x = (px - (int)cx) / unitPerPixel;
+            double y = ((int)cy - py) / unitPerPixel; // invertiert für korrekte Richtung
+
+            // Vektor aus Funktion
+            Dmath::Vec3D currentVec = vectorField(x, y);
+            double vx = currentVec.getX();
+            double vy = -currentVec.getY();
+
+            if(vx == 0 && vy == 0) continue; // Skip Nullvektoren
+
+            // Normieren und skalieren auf Pfeillänge
+            double len = std::sqrt(vx*vx + vy*vy);
+            vx = (vx / len) * arrowLength;
+            vy = (vy / len) * arrowLength;
+
+            // Pixelkoordinaten für Startpunkt (OriginX/Y)
+            // ACHTUNG: Y invertieren, da Pixel-Y nach unten
+            Dmath::Vec2D vec(vx, -vy, px, py);
+
+            // Pfeil zeichnen
+            plotVector(vec, 1.5, color);
+        }
+    }
+}
 
 void Dmath::Plotter::setPixel(int x, int y, RGB color) {
     if (x < 0 || x >= (int)width || y < 0 || y >= (int)height) return;
