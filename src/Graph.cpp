@@ -27,9 +27,9 @@ void Dmath::Plotter::plotCurve(Dmath::SingleVectorFunction& curve, Dmath::Scalar
 }
 
 
-void Dmath::Plotter::plotVector(Dmath::Vec2D vec, double scale, RGB color) {
-    int ox = (int)vec.getOriginX();
-    int oy = (int)vec.getOriginY(); // Pixel-Rasterpunkt
+void Dmath::Plotter::plotVector(Dmath::Vec2D vec, Dmath::Scalar scale, RGB color) {
+    int ox =  (int)vec.getOriginX()*scale + cx;
+    int oy = -(int)vec.getOriginY()*scale + cy; 
     double vx = vec.getX() * scale;
     double vy = vec.getY() * scale;
 
@@ -62,6 +62,17 @@ void Dmath::Plotter::plotVector(Dmath::Vec2D vec, double scale, RGB color) {
     setPixel(ex, ey, color);
 }
 
+void Dmath::Plotter::plotComplexNum(Dmath::Complex z, Dmath::Scalar scale, RGB color) {
+    int x = (int)z.getRealPart();
+    int y = (int)(z.getImaginaryPart());
+    drawPoint(x, y, scale, color);
+}
+
+
+
+
+
+
 // Hilfsfunktion zum Zeichnen von Linien (Bresenham)
 void Dmath::Plotter::drawLine(int x0, int y0, int x1, int y1, RGB color) {
     int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
@@ -77,37 +88,55 @@ void Dmath::Plotter::drawLine(int x0, int y0, int x1, int y1, RGB color) {
     }
 }
 
+void Dmath::Plotter::drawPoint(Dmath::Scalar x, Dmath::Scalar y,Dmath::Scalar scale, RGB color)  {
+    int px = (int)(cx + x * scale);       // x in Pixel transformieren
+    int py = (int)(cy - y * scale);       // y invertieren, da Pixel-Y nach unten geht
+
+    int radius = 5;                        // Punktgröße
+    for (int dx = -radius; dx <= radius; dx++) {
+        for (int dy = -radius; dy <= radius; dy++) {
+            if (dx*dx + dy*dy <= radius*radius) {
+                setPixel(px + dx, py + dy, color);
+            }
+        }
+    }
+}
 
 
 void Dmath::Plotter::plotVectorField(Dmath::DoubleVectorFunction& vectorField, Dmath::Scalar step, RGB color) {
-    const double arrowLength = 15.0;      // Länge in Pixeln
-    const double unitPerPixel = 50.0;     // Skalierung mathematisch -> Pixel
+    const double arrowLength  = 15.0;   // Pfeillänge in Pixeln
+    const double unitPerPixel = 50.0;  // mathematische Einheit → Pixel
 
-    for(int px = 0; px < (int)width; px += (int)step){
-        for(int py = 0; py < (int)height; py += (int)step){
-            
-            // Pixel -> Mathematische Koordinaten
+    for (int px = 0; px < (int)width; px += (int)step) {
+        for (int py = 0; py < (int)height; py += (int)step) {
+
+            // Pixel → mathematische Koordinaten
             double x = (px - (int)cx) / unitPerPixel;
-            double y = ((int)cy - py) / unitPerPixel; // invertiert für korrekte Richtung
+            double y = ((int)cy - py) / unitPerPixel;
 
-            // Vektor aus Funktion
-            Dmath::Vec3D currentVec = vectorField(x, y);
-            double vx = currentVec.getX();
-            double vy = -currentVec.getY();
+            // Vektorfeld auswerten
+            Dmath::Vec3D v = vectorField(x, y);
+            double vx = v.getX();
+            double vy = v.getY();
 
-            if(vx == 0 && vy == 0) continue; // Skip Nullvektoren
+            if (vx == 0.0 && vy == 0.0)
+                continue;
 
-            // Normieren und skalieren auf Pfeillänge
-            double len = std::sqrt(vx*vx + vy*vy);
-            vx = (vx / len) * arrowLength;
-            vy = (vy / len) * arrowLength;
+            // Normieren
+            double len = std::sqrt(vx * vx + vy * vy);
+            vx /= len;
+            vy /= len;
 
-            // Pixelkoordinaten für Startpunkt (OriginX/Y)
-            // ACHTUNG: Y invertieren, da Pixel-Y nach unten
-            Dmath::Vec2D vec(vx, -vy, px, py);
+            // Pfeil auf feste Pixel-Länge skalieren,
+            // zurück in mathematische Einheiten
+            vx *= arrowLength / unitPerPixel;
+            vy *= arrowLength / unitPerPixel;
 
-            // Pfeil zeichnen
-            plotVector(vec, 1.5, color);
+            
+            Dmath::Vec2D vec(vx, vy, x, y);
+
+            // plotVector macht selbst die Pixel-Transformation
+            plotVector(vec, unitPerPixel, color);
         }
     }
 }
@@ -118,7 +147,11 @@ void Dmath::Plotter::setPixel(int x, int y, RGB color) {
 }
 
 
-
+void Dmath::Plotter::clear() {
+        image.clear();
+        image.resize(width * height, RGB{255,255,255});
+        DrawAxes();
+    }
 
 
 
@@ -126,6 +159,8 @@ void Dmath::Plotter::setPixel(int x, int y, RGB color) {
 
 
     void Dmath::Plotter::DrawAxes() {
+
+    DrawGrid();
 
     const int minorStep = 10;   // kleine Striche
     const int majorStep = 50;   // große Striche
@@ -163,10 +198,25 @@ void Dmath::Plotter::setPixel(int x, int y, RGB color) {
                 setPixel(cx + i, y, RGB{0,0,0});
         }
     }
+    
 }
 
 
+void Dmath::Plotter::DrawGrid() {
+    const int gridStep = 50; 
 
+    for (unsigned int x = 10; x < width; x += gridStep) {
+        for (unsigned int y = 0; y < height; y++) {
+            setPixel(x, y, RGB{220,220,220});
+        }
+    }
+
+    for (unsigned int y = 40; y < height; y += gridStep) {
+        for (unsigned int x = 0; x < width; x++) {
+            setPixel(x, y, RGB{220,220,220});
+        }
+    }
+}
 
 
 
@@ -215,3 +265,46 @@ void Dmath::Plotter::writeBMP() {
 
         file.close();
     }
+
+
+
+
+
+Dmath::RGB Dmath::Plotter::mapValueToColorSmooth(double value, double minVal, double maxVal) {
+    if (maxVal <= minVal)
+        return RGB{0,0,255};
+
+    if (value < minVal) value = minVal;
+    if (value > maxVal) value = maxVal;
+
+    double t = (value - minVal) / (maxVal - minVal);
+
+    double r = 0, g = 0, b = 0;
+
+    if (t < 0.25) {             // Blau → Cyan
+        double k = t / 0.25;
+        r = 0;
+        g = 255 * k;
+        b = 255;
+    }
+    else if (t < 0.5) {         // Cyan → Grün
+        double k = (t - 0.25) / 0.25;
+        r = 0;
+        g = 255;
+        b = 255 * (1 - k);
+    }
+    else if (t < 0.75) {        // Grün → Gelb
+        double k = (t - 0.5) / 0.25;
+        r = 255 * k;
+        g = 255;
+        b = 0;
+    }
+    else {                      // Gelb → Rot
+        double k = (t - 0.75) / 0.25;
+        r = 255;
+        g = 255 * (1 - k);
+        b = 0;
+    }
+
+    return RGB{(unsigned char)r, (unsigned char)g, (unsigned char)b};
+}

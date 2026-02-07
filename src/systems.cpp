@@ -307,6 +307,3 @@ double CoordinateSystem3D::getRadiusSphere() {
 double CoordinateSystem3D::getRadiusCylinder() {
     return PYTH(this->X, this->Y);
 }
-
-
-

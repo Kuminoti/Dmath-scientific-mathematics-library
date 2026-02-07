@@ -10,7 +10,7 @@
  * GitHub: https://github.com/Kuminoti
  * 
 */
-#define KNOWEN_LINES_OF_CODE 8555
+#define KNOWEN_LINES_OF_CODE 9248 //src 4891 include 4357
 #define VERSION = "1.0"
 
 #include"Types/dMap.hpp"
