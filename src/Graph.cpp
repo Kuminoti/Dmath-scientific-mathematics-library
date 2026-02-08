@@ -92,7 +92,7 @@ void Dmath::Plotter::drawPoint(Dmath::Scalar x, Dmath::Scalar y,Dmath::Scalar sc
     int px = (int)(cx + x * scale);       // x in Pixel transformieren
     int py = (int)(cy - y * scale);       // y invertieren, da Pixel-Y nach unten geht
 
-    int radius = 5;                        // Punktgröße
+    int radius = 5* scale;                        // Punktgröße
     for (int dx = -radius; dx <= radius; dx++) {
         for (int dy = -radius; dy <= radius; dy++) {
             if (dx*dx + dy*dy <= radius*radius) {
@@ -123,9 +123,9 @@ void Dmath::Plotter::plotVectorField(Dmath::DoubleVectorFunction& vectorField, D
                 continue;
 
             // Normieren
-            double len = std::sqrt(vx * vx + vy * vy);
-            vx /= len;
-            vy /= len;
+            // double len = std::sqrt(vx * vx + vy * vy);
+            // vx /= len;
+            // vy /= len;
 
             // Pfeil auf feste Pixel-Länge skalieren,
             // zurück in mathematische Einheiten

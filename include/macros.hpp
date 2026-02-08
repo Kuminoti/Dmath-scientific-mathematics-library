@@ -41,6 +41,8 @@
 
     #define TWOPI      (2 * PI)
     #define FOUR_PI    (4 * PI)
+    #define EIGHT_PI   (8 * PI)
+    #define SIXTEEN_PI (16 * PI)
     #define RAD_TO_DEG (180.f/PI)              //Radiants to Degrees
     #define DEG_TO_RAD (PI/180.f)              //Degres to Radiants
     #define DEGTORAD(ANGLE) ((ANGLE)*DEG_TO_RAD)

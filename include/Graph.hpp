@@ -15,14 +15,14 @@ class Plotter {
 
 private:
 
-    Dmath::Natural width  = 1920;
-    Dmath::Natural height = 1080;
+    Dmath::Natural width  = 2920;
+    Dmath::Natural height = 2080;
     Dmath::Natural cx = width  / 2;
     Dmath::Natural cy = height / 2;
 
     std::vector<RGB> image;
     std::string filename;
-
+    bool vectorNormed = false;
 
 public: //mainConstructor:
 
@@ -51,6 +51,8 @@ public: //Public main methods
     
 public: //public getters and setters:
 
+    void changeVectorNorming(bool normed){ this->vectorNormed = normed; }   
+
     void setWidth(unsigned int w) { width = w; }
 
     void setHeight(unsigned int h) { height = h; }
@@ -64,6 +66,7 @@ public: //public getters and setters:
     Dmath::Natural getCenterX() const { return cx; }
 
     Dmath::Natural getCenterY() const { return cy; }
+
 
 
 private: //private helper methods
