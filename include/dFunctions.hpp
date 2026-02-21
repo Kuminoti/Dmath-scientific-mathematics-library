@@ -18,30 +18,30 @@ NAMESPACESTART
 
 //Mathmatical operations:
 
- auto sec  = [](double x) ->double {return 1/std::cos(x); };
- auto cec  = [](double x) ->double {return 1/std::sin(x); };
- auto cot  = [](double x) ->double {return 1/std::tan(x); };
+inline constexpr auto sec  = [](double x) ->double {return 1/std::cos(x); };
+inline constexpr auto cec  = [](double x) ->double {return 1/std::sin(x); };
+inline constexpr auto cot  = [](double x) ->double {return 1/std::tan(x); };
 
- auto asec = [](double x) ->double { return std::acos(1/x); };
- auto acsc = [](double x) ->double { return std::asin(1/x); };
- auto acot = [](double x) ->double {
+inline constexpr auto asec = [](double x) ->double { return std::acos(1/x); };
+inline constexpr auto acsc = [](double x) ->double { return std::asin(1/x); };
+inline constexpr auto acot = [](double x) ->double {
     if(x < 0){
         return (std::atan(1/x) + PI);
     }
     return std::atan(1/x);
  };
 
- auto cosh = [](double x) ->double { return (std::exp(x) + std::exp(-x)) / 2; };    
- auto sinh = [](double x) ->double { return (std::exp(x) - std::exp(-x)) / 2; };   
+inline constexpr auto cosh = [](double x) ->double { return (std::exp(x) + std::exp(-x)) / 2; };    
+inline constexpr auto sinh = [](double x) ->double { return (std::exp(x) - std::exp(-x)) / 2; };   
 
-auto greaterThan = [](double greater,double than)->bool {
+inline constexpr auto greaterThan = [](double greater,double than)->bool {
     if(greater > than){
         return true;
     }
     return false;
 };
 
-auto smallerThan = [](double smaller, double than)->bool {
+inline constexpr auto smallerThan = [](double smaller, double than)->bool {
     if(smaller < than){
         return true;
     }
@@ -63,10 +63,10 @@ SHARED_LIB double derivativeAt(Dmath::singleVarFunction func, double point);
 SHARED_LIB std::vector<Dmath::Scalar> derivativeVector(Dmath::singleVarFunction, double start, double end, double res);
 
 
-auto sleep = [](size_t millis) ->void { std::this_thread::sleep_for(std::chrono::milliseconds(millis));};
+inline constexpr auto sleep = [](size_t millis) ->void { std::this_thread::sleep_for(std::chrono::milliseconds(millis));};
 
 
-auto sleepMicros = [](size_t micros) -> void { std::this_thread::sleep_for(std::chrono::microseconds(micros)); };
+inline constexpr auto sleepMicros = [](size_t micros) -> void { std::this_thread::sleep_for(std::chrono::microseconds(micros)); };
 
 
 SHARED_LIB double pyth2(double a, double b);
