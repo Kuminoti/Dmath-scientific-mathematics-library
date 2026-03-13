@@ -53,11 +53,14 @@ public:
     ~LOGGER();
 
 public:
+    //For info
+    void operator<<(const std::string& info);
+
     //Prints out file, line and the current Information
-    void LOG(std::string info, const char* FILE, int LINE);
+    void LOG(const std::string& info, const char* FILE, int LINE);
 
 
-    void LOG(std::string info);
+    void LOG(const std::string& info);
 
     void WARN(std::string warning);
 

@@ -37,8 +37,12 @@ DEBUG::LOGGER::~LOGGER(){
         std::cout << this->currentInformation;
     }
 
+void DEBUG::LOGGER::operator<<(const std::string& info){
 
-void DEBUG::LOGGER::LOG(std::string info, const char* FILE, int LINE){
+}
+
+
+void DEBUG::LOGGER::LOG(const std::string& info, const char* FILE, int LINE){
     std::string fileName = FILE; 
     std::string LineNumber = std::to_string(LINE);
     std::string logString = "File: " + fileName + " | Line: " + LineNumber + " | Info: " + info + "\n";
@@ -51,7 +55,7 @@ void DEBUG::LOGGER::LOG(std::string info, const char* FILE, int LINE){
 }
 
 
-void DEBUG::LOGGER::LOG(std::string info){
+void DEBUG::LOGGER::LOG(const std::string& info){
         
     std::string logString = "Info:\n " + info + "\n";
     std::cout << logString;
