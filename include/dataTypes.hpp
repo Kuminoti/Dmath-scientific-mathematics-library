@@ -46,6 +46,22 @@ enum ERROR_CODE{
   OTHER_ERROR       = 9999
 };
 
+struct RGBA{
+  Dmath::Natural RED = 0x00;
+  Dmath::Natural GRN = 0x00;
+  Dmath::Natural BLU = 0x00;
+
+  Dmath::Scalar ALPHA = 1.0;
+
+  //@return rgba(..,..,..,..)
+  std::string getColorCode(){
+    return "rgba(" + std::to_string(RED) + ", " + 
+            		 std::to_string(GRN) + ", " +
+					 std::to_string(BLU) + ", " +
+					 std::to_string(ALPHA) + ")";
+  }
+
+};
 
 
 

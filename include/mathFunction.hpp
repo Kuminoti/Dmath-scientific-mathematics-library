@@ -90,7 +90,7 @@ public:
     }
 
     std::shared_ptr<FunctionBase> clone() const override {
-        return std::make_shared<FunctionWrapper<Func>>(*this);
+        return std::make_shared<FunctionWrapperConst<Func>>(*this);
     }
 
 };
