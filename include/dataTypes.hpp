@@ -46,6 +46,9 @@ enum ERROR_CODE{
   OTHER_ERROR       = 9999
 };
 
+
+
+
 struct RGBA{
   Dmath::Natural RED = 0x00;
   Dmath::Natural GRN = 0x00;

@@ -28,6 +28,8 @@ public:
         return this->data;
     }
 
+    dType getData(){ return data; }
+
     void addright(dType newData, int newID) {
         if (right == nullptr) {
             right = new Node<dType>(newData, newID);

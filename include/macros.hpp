@@ -8,18 +8,22 @@
 
 /* This File contains all the necessary constants, librarys and macros for the project */
 
-
+#pragma region Librarys
     //Librarys needed for this project
-    #include <cmath>
-    #include <vector>
-    #include <functional>
+
+    #include <cmath>       //Mathmatical operations
+    #include <vector>      //Container
+    #include <functional>  
     #include <stdint.h>
     #include <algorithm>
     #include <thread>
     #include <type_traits>
     #include <string>
-    
 
+#pragma endregion
+
+
+#pragma region Constants
     //Physical and mathmatical constants, and constants
     #define ZERO_KELVINK -273.17   //0Kelvin in celsius degrees
     #define ZERO_KELVINC  273.17   //0Degrees Celsius in Kelvin
@@ -45,8 +49,7 @@
     #define SIXTEEN_PI (16 * PI)
     #define RAD_TO_DEG (180.f/PI)              //Radiants to Degrees
     #define DEG_TO_RAD (PI/180.f)              //Degres to Radiants
-    #define DEGTORAD(ANGLE) ((ANGLE)*DEG_TO_RAD)
-    #define RADTODEG(RADIANT) ((RADIANT)*RAD_TO_DEG)
+
     
 
 
@@ -55,157 +58,215 @@
     #define ROOT_TWO   1.41421               //The squareroot of 2
     #define ROOT_THREE 1.7320                //The squareroot of 3
     #define CNULL      ((void *)0)
+
+
+#pragma region Types
+
+    #define THIS_FILE __FILE__
+    #define THIS_LINE __LINE__
+
+    #define  byte uint8_t
+
     //Main Namespaces
-    #define NAMESPACETEST         namespace Testing {
-    #define NAMESPACEWORKING      namespace Working{
-    #define NAMESPACESTART        namespace Dmath {
+    #define NAMESPACEWORKING      namespace Working {
+    #define NAMESPACESTART        namespace Dmath   {
     #define NAMESPACEEXPERIMENTAL namespace Experimental{
     #define NAMESPACEEND        }
 
-    //For functional math later:
-    #define SINGLENULLFUNCTION [](double x) ->double                      { return 0; }
-    #define DOUBLENULLFUNCTION [](double x, double y) ->double            { return 0; }
+    //For functional math:
+    #define NULLFUNCTION       []() -> double                             { return 0; }
+    #define SINGLENULLFUNCTION [](double x) -> double                     { return 0; }
+    #define DOUBLENULLFUNCTION [](double x, double y) -> double           { return 0; }
     #define TRIPLENULLFUNCTION [](double x, double y, double z) -> double { return 0; }  
+
+#pragma endregion
+
+//////////////////////////
+
+#pragma region Functional
 
     #define SQUARED(data) ((data) * (data))
     #define CUBED(data) ((data) * (data) * (data))
+
+    #define DEGTORAD(ANGLE) ((ANGLE)*DEG_TO_RAD)
+    #define RADTODEG(RADIANT) ((RADIANT)*RAD_TO_DEG)
 
     //Satz des pytagoras
     #define PYTH(inputA, inputB) (std::sqrt((inputA * inputA) + (inputB * inputB)))
     #define PYTH3(inputX, inputY, inputZ) (std::sqrt((inputX * inputX)+(inputY*inputY)+(inputZ*inputZ)))
 
 
-    #define THIS_FILE __FILE__
-    #define THIS_LINE __LINE__
+#pragma endregion
 
-    #define  byte uint8_t
-    
-    #define CARTESIAN_IS_3D_STANDARD
+
+
+#pragma region controll macros
+
     #define CARTESIAN_IS_2D_STANDARD
- #if (defined(SPHERE_IS_STANDARD) || defined(CYLINDER_IS_STANDARD)) &&                              \
-        defined(CARTESIAN_IS_3D_STANDARD)
-        #warning "Warning: More than one system is defined!"
-        #define COORDINATES_READY
-        #undef CARTESIAN_IS_STANDARD
+    //#define POLAR_IS_STANDARD
 
-        #ifdef SPHERE_IS_STANDARD
-            #undef CYLINDER_IS_STANDARD
-            #warning "Sphere system will be standart!"
-            #define COORDINATES_READY
-        #endif
-        
-        #else
-        #define COORDINATES_READY
-        
-
-    #endif
-
-#if (defined(_WIN32) || defined(_WIN64))
-    #include"Windows.h"
-    #ifdef BUILD_DLL
-        #define SHARED_LIB __declspec(dllexport)
-    #else
-        #define SHARED_LIB __declspec(dllimport)
-    #endif
-
-#else
-    // Für andere Plattformen: möglicherweise SHARED_LIB leer lassen oder anders definieren
-    #define SHARED_LIB
-#endif
+    #define CARTESIAN_IS_3D_STANDARD
+    //#define SPHERE_IS_STANDARD
+    //#define CYLINDER_IS_STANDARD
 
 
-    #if (defined(CARTESIAN_IS_2D_STANDARD) && defined(POLAR_IS_STANDARD))
+    #if defined(CARTESIAN_IS_2D_STANDARD) && defined(POLAR_IS_STANDARD)
+
+        #warning "Both 2D systems defined. Using Cartesian."
         #undef POLAR_IS_STANDARD
-#
-    #elif defined(CARTESIAN_IS_2D_STANDARD)
-        #define COORDINATES_READY
 
-    #endif //defined(CARTESIAN_IS_2D_STANDARD) && defined(POLAR_IS_STANDARD)
+    #endif
+
+
+
+
+    #if defined(CARTESIAN_IS_3D_STANDARD) && \
+        (defined(SPHERE_IS_STANDARD) || defined(CYLINDER_IS_STANDARD))
+
+        #warning "Cartesian 3D overrides other 3D systems."
+
+        #undef SPHERE_IS_STANDARD
+        #undef CYLINDER_IS_STANDARD
+
+    #endif
 
     #if (defined(SPHERE_IS_STANDARD) || defined(CYLINDER_IS_STANDARD) ||                               \
         defined(CARTESIAN_IS_3D_STANDARD) || defined(POLAR_IS_STANDARD) ||                            \
         defined(CARTESIAN_IS_2D_STANDARD))
-        #define COORDINATES_READY
+        #define SYSTEM_IS_SET
+    #else
+        #error "FATAL ERROR NO SYSTEM SET"
+    #endif
+
+
+
+
+
+    #if defined(_WIN32) || defined(_WIN64)
+
+        #define OS_WINDOWS
+        #include"Windows.h"
+        #warning "Compiling for Windows"
+
+        #ifdef BUILD_DLL
+            #define SHARED_LIB __declspec(dllexport)
         #else
+            #define SHARED_LIB __declspec(dllimport)
+        #endif
+
+    #elif defined(__linux__)
+
+        #define OS_LINUX
+        #warning "Compiling for Linux"
+        #ifdef BUILD_DLL
+            #warning "No Dlls in linux"
+            #undef BUILD_DLL
+        #endif
+
+    #elif defined(__APPLE__) && defined(__MACH__)
+
+        #define OS_MAC
+        #warning "Compiling for MacOS"
+
+    #else
+
+        #error "Unknown Operating System"
 
     #endif
 
-    #ifdef WORKING
-        #warning "DEBUGMODE"
-        
-        #ifdef RELEASE
-            #undef RELEASE
-        #endif
 
-        #include <iostream>
-        #include <fstream>
+//==============================
+// OS READY FLAG
+//==============================
 
-        
+#if defined(OS_WINDOWS) || defined(OS_LINUX) || defined(OS_MAC)
+    #define OS_IS_SET
+#endif
+ 
 
-      
-     
-    #endif //WORKING
-    
-    
+
+    #define ANGLE_UNIT_RADIANTS
+    //#define ANGLE_UNIT_DEGREES
+
+    #if defined(ANGLE_UNIT_RADIANTS) && defined(ANGLE_UNIT_DEGREES)
+
+        #warning "Both angle units defined. Using radians."
+        #undef ANGLE_UNIT_DEGREES
+
+    #endif
+
+    //Radiants is standard in c++ so no conversion needed
+    #ifdef ANGLE_UNIT_RADIANTS
+        #define getAngle(data) (data)
+        #define ANGLE_UNIT_SET
+    #endif
+
+    //If degree is set, redefine getAngle 
+    #ifdef ANGLE_UNIT_DEGREES
+        #define getAngle(data) (RADTODEG(data))
+        #define ANGLE_UNIT_SET
+    #endif 
+
+
+    #if (defined(SYSTEM_IS_SET) && defined(ANGLE_UNIT_SET))
+        #define SYSTEM_READY //Wird in anderen dateien verwendet
+
+    #endif
   
-//Choose your prefered angle unit with (un)commenting the fitting macro
-#define STANDARD_ANGLE_UNIT_DEG
-//#define STANDARD_ANGLE_UNIT_RAD
-#if(defined(STANDARD_ANGLE_UNIT_DEG) || defined(STANDARD_ANGLE_UNIT_RAD))
-#define ANGLE_UNIT_SET
+    
+
+#pragma endregion
+
+
+
+#if defined(_MSC_VER)
+
+    #define COMPILER_MSVC
+    #warning "Compiler: MSVC"
+
+#elif defined(__clang__)
+
+    #define COMPILER_CLANG
+    #warning "Compiler: Clang"
+
+#elif defined(__GNUC__)
+
+    #define COMPILER_GCC
+    #warning "Compiler: GCC"
+
 #else
-#if(defined(STANDARD_ANGLE_UNIT_DEG) && defined(STANDARD_ANGLE_UNIT_RAD))
-#warning "Both angle units are set standard will be radiants!"
-#undef STANDARD_ANGLE_UNIT_DEG
-#define ANGLE_UNIT_SET
-#endif
-#endif
 
-//Uncomment to choose your standard coordinate system
-
-#define CARTESIAN_IS_2D_STANDARD   // Cartesian system: X,Y
-//#define POLAR_IS_STANDARD        //Polar system: Radius, phi
-
-#define CARTESIAN_IS_3D_STANDARD   //Cartesian system: X,Y,Z
-//#define SPHERE_IS_STANDARD       // Sphere system: Radius, phi, phi
-//#define CYLINDER_IS_STANDARD     //Cylinder system: Radius, phi, height
-
-#if (defined(SPHERE_IS_STANDARD) || defined(CYLINDER_IS_STANDARD)) &&                              \
-    defined(CARTESIAN_IS_3D_STANDARD)
-#warning "Warning: More than one system is defined!"
-#undef CARTESIAN_IS_STANDARD
-#ifdef SPHERE_IS_STANDARD
-#undef CYLINDER_IS_STANDARD
-#warning "Sphere system will be standart!"
-#endif
-#warning "Cylinder system will be standart!"
+    #warning "Unknown compiler"
 
 #endif
 
-#ifdef POLAR_IS_STANDARD
-#ifdef CARTESIAN_IS_2D_STANDARD
-#undef CARTESIAN_IS_2D_STANDARD
-#warning                                                                                           \
-    "Warning: You defined polar coordinates as standard and cartesian as 2D standard. Polar will be standard."
-#endif
-#endif
 
-#if (defined(SPHERE_IS_STANDARD) || defined(CYLINDER_IS_STANDARD) ||                               \
-     defined(CARTESIAN_IS_3D_STANDARD) || defined(POLAR_IS_STANDARD) ||                            \
-     defined(CARTESIAN_IS_2D_STANDARD))
-#define SYSTEM_IS_SET
+
+#if defined(_WIN64) || defined(__x86_64__) || defined(__ppc64__)
+
+    #define ARCH_64BIT
+    #warning "64 Bit Architecture"
+
 #else
-#error "FATAL ERROR NO SYSTEM SET"
-#endif
 
-#if (defined(SYSTEM_IS_SET) && defined(ANGLE_UNIT_SET))
-#define SYSTEM_READY
+    #define ARCH_32BIT
+    #warning "32 Bit Architecture"
 
 #endif
 
 
-   
-  
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #endif //DK_MACROS_HPP
