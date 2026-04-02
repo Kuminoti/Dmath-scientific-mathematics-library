@@ -1,6 +1,76 @@
 #include"../include/mathFunction.hpp"
 
 
+
+#pragma region Function
+
+Dmath::Scalar Dmath::Function::operator()() {
+    if (funcBase) {
+        return funcBase->Call(); // Delegate the call to the stored function
+    }
+    return 0.0; // Return a default value if no function is stored
+}
+
+
+Dmath::Function  Dmath::Function::operator+ (Dmath::Function funcOne) const {
+    Dmath::Function lhs = *this;
+    Dmath::Function rhs = funcOne;
+
+    auto addFunc = [lhs, rhs]() mutable -> double {
+        return lhs() + rhs();
+    };
+
+
+    Dmath::Function func(addFunc);
+    return func;
+}
+
+
+Dmath::Function  Dmath::Function::operator- (Dmath::Function funcOne) const {
+    Dmath::Function lhs = *this;
+    Dmath::Function rhs = funcOne;
+
+    auto subFunc = [lhs, rhs]() mutable -> double {
+        return lhs() - rhs();
+    };
+
+
+    Dmath::Function func(subFunc);
+    return func;
+}
+
+Dmath::Function  Dmath::Function::operator* (Dmath::Function funcOne) const {
+    Dmath::Function lhs = *this;
+    Dmath::Function rhs = funcOne;
+
+    auto mulFunc = [lhs, rhs]() mutable -> double {
+        return lhs() * rhs();
+    };
+
+
+    Dmath::Function func(mulFunc);
+    return func;
+}
+
+Dmath::Function  Dmath::Function::operator/(Dmath::Function funcOne) const {
+    Dmath::Function lhs = *this;
+    Dmath::Function rhs = funcOne;
+
+    auto divFunc = [lhs, rhs]() mutable -> double {
+        return lhs() / rhs();
+    };
+
+
+    Dmath::Function func(divFunc);
+    return func;
+}
+
+
+
+
+#pragma endregion
+
+
 #pragma region SingleVar
 
 bool Dmath::SingleVarFunction::checkParams(Dmath::Parameters params){

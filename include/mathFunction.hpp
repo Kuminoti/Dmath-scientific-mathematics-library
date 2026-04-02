@@ -221,18 +221,18 @@ public:
     template<typename Callable>
     Function(Callable func) : funcBase(std::make_shared<FunctionWrapperConst<Callable>>(func)) {}
 
-    Function(const Function& other)
-    : funcBase(other.funcBase ? other.funcBase->clone() : nullptr) {}
+    Function(const Function& other) : funcBase(other.funcBase ? other.funcBase->clone() : nullptr) {}
 
     Function() = default;
 
 
-    double operator()() {
-        if (funcBase) {
-            return funcBase->Call(); // Delegate the call to the stored function
-        }
-        return 0.0; // Return a default value if no function is stored
-    }
+    Dmath::Scalar operator()();
+
+
+    Function operator+ ( Function funcOne) const;
+    Function operator- ( Function funcOne) const;
+    Function operator* ( Function funcOne) const;
+    Function operator/ ( Function funcOne) const;
 
 };
 
