@@ -38,7 +38,7 @@ DEBUG::LOGGER::~LOGGER(){
     }
 
 void DEBUG::LOGGER::operator<<(const std::string& info){
-
+    this->LOG(info);
 }
 
 
