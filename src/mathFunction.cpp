@@ -104,6 +104,14 @@ size_t Dmath::SingleVarFunction::numOfElements(Dmath::Parameters param){
     return result;
 }
 
+Dmath::SingleVarFunction Dmath::SingleVarFunction::operator+(Dmath::Scalar num) const {
+    Dmath::SingleVarFunction lhs = *this;
+    Dmath::Function numfunc = [=](){ return num; };
+    auto addFunc = [lhs, numfunc](double x) mutable -> double {
+        return lhs(x) + numfunc();
+    };
+}
+
 
 Dmath::SingleVarFunction  Dmath::SingleVarFunction::operator+ ( Function funcOne) const {
     Dmath::SingleVarFunction lhs = *this;
@@ -247,14 +255,14 @@ double Dmath::SingleVarFunction::operator()(double x)  const{
 
 
 
-Dmath::SingleVarFunction Dmath::SingleVarFunction::operator+(Dmath::Scalar num) const {
-    auto add = [this, num](double x) mutable ->double { 
-        return (this->funcBase->Callx(x) + num);
-    };
+// Dmath::SingleVarFunction Dmath::SingleVarFunction::operator+(Dmath::Scalar num) const {
+//     auto add = [this, num](double x) mutable ->double { 
+//         return (this->funcBase->Callx(x) + num);
+//     };
 
-    Dmath::SingleVarFunction func = add;
-    return func;
-}
+//     Dmath::SingleVarFunction func = add;
+//     return func;
+// }
 
 
 std::vector<double>  Dmath::SingleVarFunction::getFunctionVector(Dmath::Parameters params){

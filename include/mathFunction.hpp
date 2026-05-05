@@ -316,8 +316,11 @@ SingleVarFunction(SingleVarFunction&& other) noexcept
 
     double operator()(double x) const;
     
-    
-    
+    SingleVarFunction operator+(Dmath::Scalar num) const;
+    SingleVarFunction operator-(Dmath::Scalar num) const;
+    SingleVarFunction operator*(Dmath::Scalar num) const;
+    SingleVarFunction operator/(Dmath::Scalar num) const;
+
     SingleVarFunction operator+ ( Function funcOne) const;
     SingleVarFunction operator- ( Function funcOne) const;
     SingleVarFunction operator* ( Function funcOne) const;
@@ -329,7 +332,7 @@ SingleVarFunction(SingleVarFunction&& other) noexcept
     SingleVarFunction operator* (SingleVarFunction funcOne) const;
     SingleVarFunction operator/ (SingleVarFunction funcOne) const;
 
-    SingleVarFunction operator+ (Dmath::Scalar num) const;
+    
 
     /* Nests one function in an other, for example:
      * (f * g)(x) := f(g(x))

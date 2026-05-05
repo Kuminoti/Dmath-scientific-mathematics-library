@@ -128,6 +128,42 @@ public: //Getters and setters
     }
 
 public: 
+
+    Matrix inverse() {
+    if (!this->isSquared()) {
+        return Matrix<mat>(1);
+    }
+
+    Matrix<mat> inverseMatrix(this->elementsRow);
+
+    if (elementsRow == 2) {
+
+        Dmath::SingleVarFunction a = this->getElement(1,1);
+        Dmath::SingleVarFunction b = this->getElement(1,2);
+        Dmath::SingleVarFunction c = this->getElement(2,1);
+        Dmath::SingleVarFunction d = this->getElement(2,2);
+
+        // determinant = ad - bc
+        Dmath::SingleVarFunction determinant = a * d - b * c;
+
+        Dmath::SingleVarFunction minusB = [=](Dmath::Scalar x) {
+            return -b(x);
+        };
+
+        Dmath::SingleVarFunction minusC = [=](Dmath::Scalar x) {
+            return -c(x);
+        };
+
+        inverseMatrix.setElement(1,1, d / determinant);
+        inverseMatrix.setElement(1,2, minusB / determinant);
+        inverseMatrix.setElement(2,1, minusC / determinant);
+        inverseMatrix.setElement(2,2, a / determinant);
+    }
+
+    return inverseMatrix;
+}
+
+
     mat getElement(uint8_t row, uint8_t Column){
         if(row < 1 || row > this->elementsRow || Column < 1 || Column > this->elementsColumn){
 
