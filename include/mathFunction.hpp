@@ -61,7 +61,7 @@ public:
     virtual std::shared_ptr<FunctionBase> clone() const = 0;
 };
 
-#pragma endregion
+#pragma endregion //Base class
 
 
 
@@ -249,9 +249,9 @@ class SHARED_LIB SingleVarFunction {
 
 private: //Private members:
     std::shared_ptr<FunctionBase> funcBase; // Smart pointer for memory management
-   
     double dx = 0.000001;
-
+    
+    
     
     
 
@@ -273,8 +273,8 @@ public: //operator overloading
     if (this != &other) {
         funcBase = other.funcBase ? other.funcBase->clone() : nullptr;
     }
-    return *this;
-}
+        return *this;
+    }
 
     // Lambda-Zuweisung
     template<typename Callable>
@@ -333,6 +333,7 @@ SingleVarFunction(SingleVarFunction&& other) noexcept
     SingleVarFunction operator/ (SingleVarFunction funcOne) const;
 
     
+
 
     /* Nests one function in an other, for example:
      * (f * g)(x) := f(g(x))
@@ -394,6 +395,8 @@ SingleVarFunction(SingleVarFunction&& other) noexcept
 
     std::vector<double> getAntiDerivativeVector(Dmath::Parameters params);
 
+  
+
 
     //returns the first and second derivative at a given point as a scalar value
     Dmath::Scalar getDerivativeAt(Dmath::Scalar x);
@@ -402,6 +405,17 @@ SingleVarFunction(SingleVarFunction&& other) noexcept
     //returns the first and second derivative as a function object 
     SingleVarFunction getDerivative();
     SingleVarFunction getSecondDerivative();
+
+
+
+
+
+
+
+
+  private: //Private helper functions
+
+    
 
 };
 

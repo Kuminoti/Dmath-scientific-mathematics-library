@@ -19,6 +19,7 @@
     #include <thread>
     #include <type_traits>
     #include <string>
+    #include <limits>
 
 #pragma endregion
 
@@ -57,15 +58,17 @@
     #define ZERO       0                     //Standard zero used as a constant for the startpoint in more dimensional vector systems
     #define ROOT_TWO   1.41421               //The squareroot of 2
     #define ROOT_THREE 1.7320                //The squareroot of 3
-    #define CNULL      ((void *)0)
+    
 
 
 #pragma region Types
 
+
+    #define CNULL      ((void *)0)
+
     #define THIS_FILE __FILE__
     #define THIS_LINE __LINE__
-
-    #define  byte uint8_t
+    
 
     //Main Namespaces
     #define NAMESPACEWORKING      namespace Working {

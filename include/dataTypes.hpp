@@ -12,6 +12,13 @@
 
 NAMESPACESTART
 
+typedef double Scalar;  //scince Scalar is most common used,Nan & INF use double
+constexpr double NaN = std::numeric_limits<double>::quiet_NaN();
+constexpr double INF = std::numeric_limits<double>::infinity();
+
+
+
+
 typedef std::function<void (void)>                    voidFunction;
 typedef std::function<double(double)>                 singleVarFunction;
 typedef std::function<double(double, double)>         doubleVarFunction;
@@ -22,7 +29,8 @@ typedef std::vector<double> doubleVector;
 
 typedef std::vector<std::string> Text;
 
-typedef double Scalar;  //
+typedef uint8_t byte 
+
 typedef size_t Natural; //Natural number: an evern and positive number >= 0
 
 /*Calculating a mathmatical function is this library works by defining start and an end point 

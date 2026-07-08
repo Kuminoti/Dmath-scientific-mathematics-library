@@ -196,7 +196,7 @@ public:
     mat determinant() const {
         if (!this->squaredMatrix) {
             std::cerr << "Determinant is undefined for non-square matrices. Returning 0." << std::endl;
-            return 0; 
+            return DOUBLENULLFUNCTION; 
         }
 
         if (this->elementsRow == 1) {
@@ -207,13 +207,13 @@ public:
             return this->mainMatrix[0][0] * this->mainMatrix[1][1] - this->mainMatrix[0][1] * this->mainMatrix[1][0];
         }
 
-        mat det = 0;
-        for (uint8_t col = 0; col < this->elementsColumn; col++) {
-            Matrix<mat> subMatrix = this->getSubMatrix(0, col); // Untermatrix erstellen
-            det += (col % 2 == 0 ? 1 : -1) * this->mainMatrix[0][col] * subMatrix.determinant();
-        }
+        // mat det = 0;
+        // // for (uint8_t col = 0; col < this->elementsColumn; col++) {
+        // //     Matrix<mat> subMatrix = this->getSubMatrix(0, col); // Untermatrix erstellen
+        // //     det += (col % 2 == 0 ? 1 : -1) * this->mainMatrix[0][col] * subMatrix.determinant();
+        // // }
 
-        return det;
+        // return det;
     }
 
 

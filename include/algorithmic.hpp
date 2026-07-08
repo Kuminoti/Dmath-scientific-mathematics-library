@@ -42,6 +42,9 @@ Dmath::MapD<Dmath::Scalar,Dmath::Scalar> ValueTable(Dmath::SingleVarFunction fun
 }
 
 
+
+
+
 NAMESPACEEND
 
 #endif //DMATH_ALGORITHMIC_HPP
