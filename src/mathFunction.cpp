@@ -110,6 +110,43 @@ Dmath::SingleVarFunction Dmath::SingleVarFunction::operator+(Dmath::Scalar num) 
     auto addFunc = [lhs, numfunc](double x) mutable -> double {
         return lhs(x) + numfunc();
     };
+    Dmath::SingleVarFunction func(addFunc);
+    return func;
+}
+
+
+Dmath::SingleVarFunction Dmath::SingleVarFunction::operator-(Dmath::Scalar num) const {
+    Dmath::SingleVarFunction lhs = *this;
+    Dmath::Function numfunc = [=](){ return num; };
+    auto addFunc = [lhs, numfunc](double x) mutable -> double {
+        return lhs(x) - numfunc();
+    };
+    Dmath::SingleVarFunction func(addFunc);
+    return func;
+}
+
+
+
+Dmath::SingleVarFunction Dmath::SingleVarFunction::operator*(Dmath::Scalar num) const {
+    Dmath::SingleVarFunction lhs = *this;
+    Dmath::Function numfunc = [=](){ return num; };
+    auto addFunc = [lhs, numfunc](double x) mutable -> double {
+        return lhs(x) * numfunc();
+    };
+    Dmath::SingleVarFunction func(addFunc);
+    return func;
+}
+
+Dmath::SingleVarFunction Dmath::SingleVarFunction::operator/(Dmath::Scalar num) const {
+    Dmath::SingleVarFunction lhs = *this;
+    Dmath::Function numfunc = [=](){ return num; };
+    if(num == 0) { return [](double x){ return Dmath::NaN; } ; }
+    auto addFunc = [lhs, numfunc](double x) mutable -> double {
+       
+        return lhs(x) / numfunc();
+    };
+    Dmath::SingleVarFunction func(addFunc);
+    return func;
 }
 
 
@@ -415,6 +452,21 @@ Dmath::SingleVarFunction Dmath::SingleVarFunction::getSecondDerivative(){
     });
 }
 
+
+Dmath::SingleVarFunction Dmath::SingleVarFunction::getNthDerivative(Dmath::Natural order){
+    //Since higher orders then 3 are unusal in classical analysis and can be problematic in the code there is a warning 
+        if(order > 3) { 
+            std::cout << "Warning higher orders then 3 can give false or problematic results " << std::endl;
+        }
+        Dmath::SingleVarFunction result = *this;
+
+        for(size_t i = 0; i < order; i++){
+            result = result.getDerivative();
+        }
+
+        return result;
+    }
+
 Dmath::SingleVarFunction Dmath::SingleVarFunction::getAntiDerivative() {
 
     return Dmath::SingleVarFunction([=](double x) {
@@ -602,12 +654,28 @@ Dmath::DoubleVarFunction Dmath::DoubleVarFunction::getPartialX(){
 
     auto basePtr = funcBase;
     Dmath::Scalar dy = this->dx; //to make the notation consistent
+
     return DoubleVarFunction([basePtr,dy](double x, double y) {
         double plusDX  = basePtr->CallXY(x + dy, y);
         double minusDX = basePtr->CallXY(x - dy, y);
         return (plusDX - minusDX) / (2 * dy);
-        });
+    });
+}
+
+
+Dmath::DoubleVarFunction Dmath::DoubleVarFunction::nthPartialDerivative(Dmath::Natural dx, Dmath::Natural dy){
+    Dmath::DoubleVarFunction result = *this;
+
+    for(size_t i = 0; i < dx; i++){
+        result = result.getPartialX();
     }
+
+    for(size_t y = 0; y < dy; y++){
+        result = result.getPartialY();
+    }
+
+    return result;
+}
 
 
 std::vector<double> Dmath::DoubleVarFunction::getPartialDerivteY(Dmath::Parameters params){

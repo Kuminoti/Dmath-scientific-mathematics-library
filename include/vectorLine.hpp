@@ -102,7 +102,7 @@ class VectorLine{
         mainMatrix.setElement(3,3,other.getOriginVec.getZ());
         mainMatrix.setElement(3,4,other.getDirectionVec.getZ());
 
-
+        return mainMatrix;
     }
 
   private: //Private helper functions

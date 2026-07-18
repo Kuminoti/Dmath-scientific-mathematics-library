@@ -410,7 +410,7 @@ SingleVarFunction(SingleVarFunction&& other) noexcept
     SingleVarFunction getSecondDerivative();
     SingleVarFunction getAntiDerivative();
 
-
+    SingleVarFunction getNthDerivative(Dmath::Natural order);
 
 
 
@@ -428,7 +428,7 @@ class SHARED_LIB DoubleVarFunction {
 private:
     std::shared_ptr<FunctionBase> funcBase; // Smart pointer for the function
    
-    double dx = 0.0000001;
+    double dx = 0.0001;
 
 private:
     bool checkParams(Dmath::Parameters params);
@@ -484,7 +484,8 @@ public: //public getters
     DoubleVarFunction getPartialX();
     DoubleVarFunction getPartialY();
 
-
+    //Returns the d-th partialderivative of eachcoordinate
+    DoubleVarFunction nthPartialDerivative(Dmath::Natural dx, Dmath::Natural dy);
     
 
     std::vector<double> getAntiDerivativeX(Dmath::Parameters params);
