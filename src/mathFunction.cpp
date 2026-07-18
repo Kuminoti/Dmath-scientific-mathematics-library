@@ -373,6 +373,26 @@ Dmath::Scalar Dmath::SingleVarFunction::getSecondDerivativeAt(Dmath::Scalar x){
     return currentResult;
 }
 
+Dmath::Scalar Dmath::SingleVarFunction::getAntiDerivativeAt(Dmath::Scalar x) {
+
+    if (x == 0)
+        return 0;
+
+    Dmath::Scalar result = 0;
+
+    Dmath::Natural num = Dmath::numberOfElements({0, x, dx});
+
+    for (size_t i = 0; i < num - 1; ++i) {
+
+        Dmath::Scalar x0 = i * dx;
+        Dmath::Scalar x1 = (i + 1) * dx;
+
+        result += (funcBase->Callx(x0) + funcBase->Callx(x1)) * 0.5 * dx;
+    }
+
+    return result;
+}
+
 
 
 Dmath::SingleVarFunction Dmath::SingleVarFunction::getDerivative(){
@@ -392,6 +412,36 @@ Dmath::SingleVarFunction Dmath::SingleVarFunction::getSecondDerivative(){
 
         const Dmath::Scalar currentResult = (plusDX - TwofOfX + minusDX)/(dx*dx);
         return currentResult;
+    });
+}
+
+Dmath::SingleVarFunction Dmath::SingleVarFunction::getAntiDerivative() {
+
+    return Dmath::SingleVarFunction([=](double x) {
+
+        if (x == 0.0)
+            return 0.0;
+
+        double sign = 1.0;
+
+        if (x < 0.0) {
+            sign = -1.0;
+            x = -x;
+        }
+
+        double result = 0.0;
+
+        std::size_t n = static_cast<std::size_t>(x / dx);
+
+        for (std::size_t i = 0; i < n; ++i) {
+
+            double x0 = i * dx;
+            double x1 = x0 + dx;
+
+            result += (funcBase->Callx(x0) + funcBase->Callx(x1)) * 0.5 * dx;
+        }
+
+        return sign * result;
     });
 }
 

@@ -402,10 +402,13 @@ SingleVarFunction(SingleVarFunction&& other) noexcept
     Dmath::Scalar getDerivativeAt(Dmath::Scalar x);
     Dmath::Scalar getSecondDerivativeAt(Dmath::Scalar x);
 
+    Dmath::Scalar getAntiDerivativeAt(Dmath::Scalar x);
+
+
     //returns the first and second derivative as a function object 
     SingleVarFunction getDerivative();
     SingleVarFunction getSecondDerivative();
-
+    SingleVarFunction getAntiDerivative();
 
 
 
