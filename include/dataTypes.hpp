@@ -29,7 +29,7 @@ typedef std::vector<double> doubleVector;
 
 typedef std::vector<std::string> Text;
 
-typedef uint8_t byte 
+typedef uint8_t byte;
 
 typedef size_t Natural; //Natural number: an evern and positive number >= 0
 
