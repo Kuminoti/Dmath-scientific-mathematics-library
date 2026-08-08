@@ -11,23 +11,14 @@
  * 
 */
 #define KNOWEN_LINES_OF_CODE 9248 //src 4891 include 4357
-#define VERSION = "1.0"
-
-#include"Types/dMap.hpp"
-#include"Types/Dstring.hpp"
+#define VERSION = "1.1"
 
 
-#include"dataTypes.hpp"         //Contains small and basic datatypes
-#include"mathVector.hpp"        //2D and 3D Vectors
-
-#include"Matrix.hpp"            //Matrices
-#include"dFunctions.hpp"        //Helperfunctions and functional math
-#include"mathFunction.hpp"      //Mathmatic funktion objects
-#include"complex.hpp"           //complex numbers
-#include"complexFunctions.hpp"
-#include"vectorfunction.hpp"
-#include"mathFunctional.hpp"  //Functionals like integrals and sums
-
-
+#include "Types/DmathTypes.hpp"
+#include "Vector/DmathVec.hpp"
+#include"Complex/complexFunctions.hpp"
+#include "Functional/DmathFunctional.hpp"
+#include"Graphics/Graph.hpp"
+#include"Variation/mathFunctional.hpp"
 
 #endif

@@ -12,8 +12,8 @@
 */
 
 
-#include"complex" //If you want to store complex numbers
-#include"vectorfunction.hpp" //To store all kinds of functions
+#include"../Complex/complex.hpp" //If you want to store complex numbers
+#include"../Functional/vectorfunction.hpp" //To store all kinds of functions
 
 NAMESPACESTART // namespace Dmath{ 
 

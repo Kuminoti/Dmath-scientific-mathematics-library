@@ -3,8 +3,8 @@
 #ifndef D_MAP_HPP
 #define D_MAP_HPP
 
-#include "../macros.hpp"
-#include"../dataTypes.hpp"
+#include "../Utils/macros.hpp"
+#include"../Utils/dataTypes.hpp"
 #include<optional>
 #include<mutex>
 #include<initializer_list>

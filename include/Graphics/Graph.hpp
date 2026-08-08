@@ -4,7 +4,7 @@
 #define DMATH_GRAPH_HPP
 
 
-#include"Dmath.hpp"
+#include"../Dmath.hpp"
 #include <fstream>
 
 NAMESPACESTART

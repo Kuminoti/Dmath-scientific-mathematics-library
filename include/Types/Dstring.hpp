@@ -3,7 +3,7 @@
 #ifndef DSTRING_HPP
 #define DSTRING_HPP
 
-#include"../dataTypes.hpp"
+#include"../Utils/dataTypes.hpp"
 #include<unordered_map>
 #include<stdexcept>
 #include<algorithm>
@@ -11,7 +11,7 @@
 
 NAMESPACESTART
 
-class SHARED_LIB StringHelper{
+class  StringHelper{
 
 public:
 

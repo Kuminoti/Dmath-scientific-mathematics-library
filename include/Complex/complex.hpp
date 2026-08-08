@@ -3,8 +3,8 @@
 #ifndef DMATH_COMPLEX_HPP
 #define DMATH_COMPLEX_HPP
 
-#include"mathVector.hpp" //To convert the data from the complex plane to a vector in cartesian coordinates
-#include"dFunctions.hpp" //Helper function
+#include"../Vector/mathVector.hpp" //To convert the data from the complex plane to a vector in cartesian coordinates
+#include"../Utils/dFunctions.hpp" //Helper function
 
 /* File include/Complex.hpp 
  * This File contains a class for Complex Numbers und fitting mathmaticals operations

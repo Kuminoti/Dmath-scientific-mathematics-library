@@ -1,4 +1,4 @@
-#include "../include/vectorfunction.hpp"
+#include "../include/Functional/vectorfunction.hpp"
 #pragma region single
 
 Dmath::SingleVectorFunction::SingleVectorFunction(

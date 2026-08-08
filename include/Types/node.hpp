@@ -2,7 +2,7 @@
 
 #ifndef DMATH_NODE_HPP
 #define DMATH_NODE_HPP
-#include"dataTypes.hpp"
+#include"../Utils/dataTypes.hpp"
 
 NAMESPACESTART
 

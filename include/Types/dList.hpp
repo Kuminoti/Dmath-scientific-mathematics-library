@@ -3,7 +3,7 @@
 #ifndef DMATH_LIST_HPP
 #define DMATH_LIST_HPP
 
-#include"../macros.hpp"
+#include"../Utils/macros.hpp"
 #include<iostream>
 #include"node.hpp"
 

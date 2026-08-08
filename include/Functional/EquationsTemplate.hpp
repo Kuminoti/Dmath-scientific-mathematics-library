@@ -4,8 +4,8 @@
 #define DMATH_EUQATION_HPP
 
 #include"mathFunction.hpp"
-#include"dataTypes.hpp"
-#include"complexFunctions.hpp"
+#include"../Utils/dataTypes.hpp"
+#include"../Complex/complexFunctions.hpp"
 #include"vectorfunction.hpp"
 
 

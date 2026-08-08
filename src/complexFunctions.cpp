@@ -1,4 +1,4 @@
-#include"../include/complexFunctions.hpp"
+#include"../include/Complex/complexFunctions.hpp"
 
 Dmath::Scalar Dmath::logarithm(Dmath::Scalar logBase, Dmath::Scalar power) {
     if (power == 1) return 0;

@@ -21,8 +21,8 @@
 #ifndef DMATH_OPERATOR_HPP
 #define DMATH_OPERATOR_HPP
 
-    #include"vectorfunction.hpp"
-    #include"dFunctions.hpp"
+    #include"../Functional/vectorfunction.hpp"
+    #include"../Utils/dFunctions.hpp"
 
     NAMESPACESTART //Namespace Dmath
       

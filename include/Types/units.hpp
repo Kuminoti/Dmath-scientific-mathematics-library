@@ -5,10 +5,10 @@
 // This header file is part of the Dmath library.
 // It is used to calculate units and conversions between them.
 
-#include "dataTypes.hpp"
+#include "../Utils/dataTypes.hpp"
 #include <stdexcept>
 #include<ostream>
-#include"mathVector.hpp"
+#include"../Vector/mathVector.hpp"
 
 NAMESPACESTART
 

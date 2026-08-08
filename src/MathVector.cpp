@@ -1,5 +1,5 @@
-#include"../include/mathVector.hpp"
-#include "../include/systemGeometry.hpp"
+#include"../include/Vector/mathVector.hpp"
+#include "../include/Vector/systemGeometry.hpp"
 
 
 using namespace Dmath;
@@ -98,15 +98,15 @@ Dmath::Vec2D Vec2D::operator*( Dmath::Matrix<Dmath::Scalar> matrix) {
     Dmath::Scalar y = this->getY();
 
     // Matrix elements:
-    // [ a b ]
-    // [ c d ]
+    // [ a b ]  [x] = [ax + by]
+    // [ c d ]  [y]   [cx + dy]
     Dmath::Scalar a = matrix.getElement(1,1);
     Dmath::Scalar b = matrix.getElement(1,2);
     Dmath::Scalar c = matrix.getElement(2,1);
     Dmath::Scalar d = matrix.getElement(2,2);
 
-    Dmath::Scalar newX = x * a + y * c;
-    Dmath::Scalar newY = x * b + y * d;
+    Dmath::Scalar newX = x * a + y * b;
+    Dmath::Scalar newY = x * c + y * d;
 
     return Dmath::Vec2D(newX, newY);
 }
@@ -495,15 +495,18 @@ void Vec2D::linearTransformation(Dmath::Matrix<Dmath::Scalar> matrix){
     return; // return 
   }
   // Matrix elements:
-  // [ a b ]
-  // [ c d ]
-  Dmath::Scalar a = matrix.getElement(1,1);
-  Dmath::Scalar b = matrix.getElement(1,2);
-  Dmath::Scalar c = matrix.getElement(2,1);
-  Dmath::Scalar d = matrix.getElement(2,2);
+  // [ a b ]  [x]  [ax + by]
+  // [ c d ]  [y]  [cx + dy]
+  Dmath::Scalar a = matrix.getElement(1, 1);
+  Dmath::Scalar b = matrix.getElement(1, 2);
+  Dmath::Scalar c = matrix.getElement(2, 1);
+  Dmath::Scalar d = matrix.getElement(2, 2);
 
-  this->X = this->X * a + this->Y * c;
-  this->Y = this->X * b + this->Y * d;
+  Dmath::Scalar x = this->X;
+  Dmath::Scalar y = this->Y;
+
+  this->X = x * a + y * b;
+  this->Y = x * c + y * d;
   this->ValidManipulation();
 }
 

@@ -3,8 +3,8 @@
 #ifndef SYSTEMS_H
 #define SYSTEMS_H
 
-#include"macros.hpp"   //Contains macros and constants for this project
-#include"dataTypes.hpp" //Contains library specific datatypes
+#include"../Utils/macros.hpp"   //Contains macros and constants for this project
+#include"../Utils/dataTypes.hpp" //Contains library specific datatypes
 
 /* 
  * This file is used to create a base and an abstraction for the other classes and systems.
@@ -174,7 +174,7 @@ class CoordinateSystem3D : public CoordinateSystem2D {
     //Basic inline getters
     inline double getTheta()   { return this->theta;   }
     inline double getHeight()  { return this->height;  }
-    inline double getZ()       { return this->Z;       } 
+    inline double getZ() const      { return this->Z;       } 
     inline double getOriginZ() { return this->originZ; }
 
     void setOriginX(double Value);

@@ -46,11 +46,11 @@
 #define DMATH_MATH_FUNCTIONAL_HPP
 
 
-#include"dFunctions.hpp"   // To get Some helperfunctions
-#include"Types/traits.hpp" //To get Specific typetraids for the code
+#include"../Utils/dFunctions.hpp"   // To get Some helperfunctions
+#include"../Types/traits.hpp" //To get Specific typetraids for the code
 
-#include"vectorfunction.hpp"
-#include"Oprator.hpp"
+#include"../Functional/vectorfunction.hpp"
+#include"/Oprator.hpp"
 
 NAMESPACESTART //Namespace Dmath
 

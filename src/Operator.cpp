@@ -1,4 +1,4 @@
-#include"../include/Oprator.hpp"
+#include"../include/Variation/Oprator.hpp"
 
 Dmath::Scalar Dmath::IntegralOperator(Dmath::Parameters param, Dmath::SingleVarFunction func){
     if(!Dmath::checkParams(param)){

@@ -3,8 +3,8 @@
 #ifndef DMATH_TYPE_TRAIDS_HPP
 #define DMATH_TYPE_TRAIDS_HPP
 
-#include"../vectorfunction.hpp"
-#include"../complex.hpp"
+#include"../Functional/vectorfunction.hpp"
+#include"../Complex/complex.hpp"
 NAMESPACESTART
 
 template<typename Com>

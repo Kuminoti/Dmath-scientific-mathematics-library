@@ -5,7 +5,7 @@
 #ifndef DMATH_DYNAMIC_ARRAY_HPP
 #define DMATH_DYNAMIC_ARRAY_HPP
 
-#include"../dataTypes.hpp"
+#include"../Utils/dataTypes.hpp"
 
 NAMESPACESTART
 

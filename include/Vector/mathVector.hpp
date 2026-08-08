@@ -45,8 +45,9 @@ class Vec2D : public CoordinateSystem2D {                          //CoordinateS
     Vec2D  operator+(const Vec2D& Mathvector);                            //Basic Vector addition
     Vec2D  operator-(const Vec2D& Mathvector);                            //Basic Vector subtractions
     Dmath::Scalar operator*(const Vec2D& Mathvector);                     //Calculates the dotproduct of two vectors
-    Dmath::Vec2D  operator*( Dmath::Matrix<Dmath::Scalar> matrix);  //Linear transformation
 
+    Dmath::Vec2D operator*( Dmath::Matrix<Dmath::Scalar> matrix);        //Linear transformation
+  
 
     void operator+=(Dmath::Duo<Dmath::Scalar, Dmath::Scalar> data);       // this x-value + Duo.one ; this y-value + Duo.two
     void operator-=(Dmath::Duo<Dmath::Scalar, Dmath::Scalar> data);       // this x-value - Duo.one ; this y-value - Duo.two

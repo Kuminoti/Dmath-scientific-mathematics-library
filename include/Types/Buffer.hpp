@@ -3,7 +3,7 @@
 #ifndef DMATH_BUFFER_HPP
 #define DMATH_BUFFER_HPP
 
-#include"../dataTypes.hpp"
+#include"../Utils/dataTypes.hpp"
 
 NAMESPACESTART
 

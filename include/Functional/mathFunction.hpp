@@ -30,11 +30,11 @@
  */
 
 
-#include"macros.hpp"
-#include"dataTypes.hpp"
-#include"mathVector.hpp"
+#include"../Utils/macros.hpp"
+#include"../Utils/dataTypes.hpp"
+#include"../Vector/mathVector.hpp"
 #include"mathmaticalCondition.hpp"
-#include"dFunctions.hpp"
+#include"../Utils/dFunctions.hpp"
 #include<memory>
 #include<windows.h>
 
