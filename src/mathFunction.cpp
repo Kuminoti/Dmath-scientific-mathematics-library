@@ -104,13 +104,36 @@ size_t Dmath::SingleVarFunction::numOfElements(Dmath::Parameters param){
     return result;
 }
 
+bool Dmath::SingleVarFunction::numericlyEqual(Dmath::SingleVarFunction other){
+
+    //creates random numbers to avoid promblematic numbers like 0
+    auto xOne = Dmath::randomNumber( 1, 15);  
+    auto xTwo = Dmath::randomNumber(15, 30);
+    auto xTri = Dmath::randomNumber(30, 50);
+    auto xFour = Dmath::randomNumber(50, 100);
+
+    if(std::abs(this->getDataAt(xOne)             - other(xOne))                       < dx &&
+       std::abs(this->getDerivativeAt(xTwo)       - other.getDerivativeAt(xTwo))      < dx &&
+       std::abs(this->getSecondDerivativeAt(xTri) - other.getSecondDerivativeAt(xTri))< dx &&
+       std::abs(this->getAntiDerivativeAt(xFour)  - other.getAntiDerivativeAt(xFour)) < dx  ){ 
+        return true;
+    }
+
+
+
+
+    return false;
+}
+
 Dmath::SingleVarFunction Dmath::SingleVarFunction::operator+(Dmath::Scalar num) const {
+    
     Dmath::SingleVarFunction lhs = *this;
     Dmath::Function numfunc = [=](){ return num; };
+    std::string newFuncData = this->getFunctionData()+ " + " + std::to_string(num);
     auto addFunc = [lhs, numfunc](double x) mutable -> double {
         return lhs(x) + numfunc();
     };
-    Dmath::SingleVarFunction func(addFunc);
+    Dmath::SingleVarFunction func(addFunc,newFuncData);
     return func;
 }
 
@@ -118,10 +141,11 @@ Dmath::SingleVarFunction Dmath::SingleVarFunction::operator+(Dmath::Scalar num) 
 Dmath::SingleVarFunction Dmath::SingleVarFunction::operator-(Dmath::Scalar num) const {
     Dmath::SingleVarFunction lhs = *this;
     Dmath::Function numfunc = [=](){ return num; };
+    std::string newFuncData = this->getFunctionData()+ " - " + std::to_string(num);
     auto addFunc = [lhs, numfunc](double x) mutable -> double {
         return lhs(x) - numfunc();
     };
-    Dmath::SingleVarFunction func(addFunc);
+    Dmath::SingleVarFunction func(addFunc, newFuncData);
     return func;
 }
 
@@ -130,22 +154,24 @@ Dmath::SingleVarFunction Dmath::SingleVarFunction::operator-(Dmath::Scalar num) 
 Dmath::SingleVarFunction Dmath::SingleVarFunction::operator*(Dmath::Scalar num) const {
     Dmath::SingleVarFunction lhs = *this;
     Dmath::Function numfunc = [=](){ return num; };
+    std::string newFuncData = this->getFunctionData()+ " * " + std::to_string(num);
     auto addFunc = [lhs, numfunc](double x) mutable -> double {
         return lhs(x) * numfunc();
     };
-    Dmath::SingleVarFunction func(addFunc);
+    Dmath::SingleVarFunction func(addFunc, newFuncData);
     return func;
 }
 
 Dmath::SingleVarFunction Dmath::SingleVarFunction::operator/(Dmath::Scalar num) const {
     Dmath::SingleVarFunction lhs = *this;
     Dmath::Function numfunc = [=](){ return num; };
+    std::string newFuncData = this->getFunctionData()+ " / " + std::to_string(num);
     if(num == 0) { return [](double x){ return Dmath::NaN; } ; }
     auto addFunc = [lhs, numfunc](double x) mutable -> double {
        
         return lhs(x) / numfunc();
     };
-    Dmath::SingleVarFunction func(addFunc);
+    Dmath::SingleVarFunction func(addFunc, newFuncData);
     return func;
 }
 
@@ -153,13 +179,13 @@ Dmath::SingleVarFunction Dmath::SingleVarFunction::operator/(Dmath::Scalar num) 
 Dmath::SingleVarFunction  Dmath::SingleVarFunction::operator+ ( Function funcOne) const {
     Dmath::SingleVarFunction lhs = *this;
     Dmath::Function rhs = funcOne;
-
+    std::string newFuncData = this->getFunctionData() + " + " + std::to_string(funcOne());
     auto addFunc = [lhs, rhs](double x) mutable -> double {
         return lhs(x) + rhs();
     };
 
 
-    Dmath::SingleVarFunction func(addFunc);
+    Dmath::SingleVarFunction func(addFunc, newFuncData);
     return func;
 }
 
@@ -173,8 +199,8 @@ Dmath::SingleVarFunction  Dmath::SingleVarFunction::operator- ( Function funcOne
         return lhs(x) - rhs();
     };
 
-
-    Dmath::SingleVarFunction func(difFunc);
+    std::string newFuncData = this->getFunctionData() + " - " + std::to_string(funcOne());
+    Dmath::SingleVarFunction func(difFunc,newFuncData);
     return func;
 }
 
@@ -188,8 +214,8 @@ Dmath::SingleVarFunction  Dmath::SingleVarFunction::operator* ( Function funcOne
         return lhs(x) * rhs();
     };
 
-
-    Dmath::SingleVarFunction func(mulFunc);
+     std::string newFuncData = this->getFunctionData() + " * " + std::to_string(funcOne());
+    Dmath::SingleVarFunction func(mulFunc, newFuncData);
     return func;
 }
 
@@ -205,8 +231,8 @@ Dmath::SingleVarFunction  Dmath::SingleVarFunction::operator/ ( Function funcOne
         return lhs(x) / rhs();
     };
 
-
-    Dmath::SingleVarFunction func(divFunc);
+     std::string newFuncData = this->getFunctionData() + " / " + std::to_string(funcOne());
+    Dmath::SingleVarFunction func(divFunc, newFuncData);
     return func;
 }
 
@@ -220,19 +246,22 @@ Dmath::SingleVarFunction Dmath::SingleVarFunction::operator+(Dmath::SingleVarFun
     auto addFunc = [lhs, rhs](double x) mutable -> double {
         return lhs(x) + rhs(x);
     };
-
-    Dmath::SingleVarFunction func(addFunc);
+    std::string newFuncData = this->getFunctionData() + " + " + funcOne.getFunctionData();
+    Dmath::SingleVarFunction func(addFunc,funcData);
     return func;
 }
 
 
 Dmath::SingleVarFunction Dmath::SingleVarFunction::operator-(Dmath::SingleVarFunction funcOne) const {
-        
-    auto sub = [this,funcOne](double x) mutable ->double {
-        return ( this->funcBase->Callx(x) - funcOne(x));
-    };
+    Dmath::SingleVarFunction lhs = *this;
+    Dmath::SingleVarFunction rhs = funcOne;
 
-    SingleVarFunction func = sub;
+    auto sub = [lhs,rhs](double x) mutable ->double {
+       return lhs(x) - rhs(x);
+    };
+    std::string newFuncData = this->getFunctionData() + " - " + funcOne.getFunctionData();
+
+    SingleVarFunction func( sub,newFuncData);
     return func;
 }
 
@@ -269,6 +298,7 @@ Dmath::SingleVarFunction Dmath::SingleVarFunction::composition(Dmath::SingleVarF
 
         return outerResult;
     };
+    
 
     Dmath::SingleVarFunction func = comp;
 

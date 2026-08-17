@@ -248,6 +248,8 @@ public:
 class SHARED_LIB SingleVarFunction {
 
 private: //Private members:
+
+    std::string funcData = ""; //Contains symbolic information 
     std::shared_ptr<FunctionBase> funcBase; // Smart pointer for memory management
     double dx = 0.000001;
     
@@ -263,8 +265,12 @@ private: //private methods:
 
 
 public: //public getters
+
+    //Operator less function call
     double getDataAt(double x){ return this->funcBase->Callx(x);  }
 
+    //Returns the symbolic Function data
+    std::string getFunctionData() const { return this->funcData; }
 
 public: //operator overloading
 
@@ -275,6 +281,11 @@ public: //operator overloading
     }
         return *this;
     }
+
+    //Lambda-Zuweisung + func info
+    template<typename Callable>
+    SingleVarFunction(Callable func, const std::string& funcInfo) : 
+    funcBase(std::make_shared<FunctionWrapper<Callable>>(std::move(func))), funcData(funcInfo){}
 
     // Lambda-Zuweisung
     template<typename Callable>
@@ -297,7 +308,9 @@ public: //operator overloading
      */
     size_t numOfElements(Dmath::Parameters param);
 
-public:
+    bool numericlyEqual(SingleVarFunction other);
+
+public: //Public constructors
 
 
     template<typename Callable>
@@ -312,7 +325,7 @@ public:
 SingleVarFunction(SingleVarFunction&& other) noexcept
     : funcBase(std::move(other.funcBase)) {}
 
-//Operator overloading
+  public: //Numeric Operator overloading
 
     double operator()(double x) const;
     
@@ -394,8 +407,6 @@ SingleVarFunction(SingleVarFunction&& other) noexcept
     std::vector<double> getSecondDerivative(Dmath::Parameters params);
 
     std::vector<double> getAntiDerivativeVector(Dmath::Parameters params);
-
-  
 
 
     //returns the first and second derivative at a given point as a scalar value

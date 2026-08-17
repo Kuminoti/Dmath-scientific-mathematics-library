@@ -48,6 +48,9 @@ inline constexpr auto smallerThan = [](double smaller, double than)->bool {
     return false;
 };
 
+inline constexpr auto currentElement = [](double start, double stepp, size_t i){
+    return (start+ i * stepp);
+};
 
 /* Functions for calculating derivarives and defined integrals, for the Dmath::singleVarFunction a typedef
  * for: std::function<double(double)> 
