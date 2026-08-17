@@ -223,16 +223,17 @@ class Vec3D : public CoordinateSystem3D {
     void addToY(double add); // Y + add
     void addToZ(double add); // Z + add
 
-    void addXYZEach (double xPlus, double yPlus,   double zPlus);        //* X + xPlus     || Y + yPlus
-    void divideXYZBy(double xDivBy, double yDivBy, double zPlus);        //* X / xDivBy    || Y / yDivBy
-    void multilpyXYZ(double xTimes, double yTimes, double zPlus);        //* X * xTimes    || Y * yTimes
-    void subtractXYZ(double xMinus, double yMinus, double zPlus);        //* X - xMinus    || Y - yMinus
+    void addXYZEach (Dmath::Scalar xPlus , Dmath::Scalar yPlus , Dmath::Scalar zPlus );        //* X + xPlus     || Y + yPlus
+    void divideXYZBy(Dmath::Scalar xDivBy, Dmath::Scalar yDivBy, Dmath::Scalar zDivBy);        //* X / xDivBy    || Y / yDivBy
+    void multilpyXYZ(Dmath::Scalar xTimes, Dmath::Scalar yTimes, Dmath::Scalar zTimes);        //* X * xTimes    || Y * yTimes
+    void subtractXYZ(Dmath::Scalar xMinus, Dmath::Scalar yMinus, Dmath::Scalar zMinus);        //* X - xMinus    || Y - yMinus
     
 
     Vec3D operator+(Vec3D& Mathvector);          //Vector addition
     Vec3D operator-(Vec3D& Mathvector);          //Vectors subraction
     Vec3D operator/(double scalarValue);         //Divides the coordinates by a given value
     double operator*(Vec3D& Mathvector);         //Scalarproduct
+    Dmath::Vec3D operator*(Dmath::Matrix<Dmath::Scalar> transformation);
 
     void operator+=(Vec3D mathvector);
     void operator-=(Vec3D mathvector);

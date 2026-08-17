@@ -8,7 +8,7 @@
 NAMESPACESTART
 
 class VectorLine{
-  private: //Private members 
+  protected: //Private members 
 
     Dmath::Vec3D originVec;
     Dmath::Vec3D directionVec;

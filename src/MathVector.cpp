@@ -166,6 +166,10 @@ void Vec2D::operator*=(Dmath::Duo<Dmath::Scalar, Dmath::Scalar> data){
 }
 
 void Vec2D::operator/=(Dmath::Duo<Dmath::Scalar, Dmath::Scalar> data){
+	if(data.one == 0 || data.two == 0){
+		std::cerr << "Error Division by Zero! Error-code: " << Dmath::ERROR_CODE::DIVISION_BY_ZERO << std::endl;
+		return;
+	}
   this->X /= data.one;
   this->Y /= data.two;
   this->ValidManipulation();
@@ -223,6 +227,10 @@ void Vec2D::operator*=(Vec2D vec){
 }
 
 void Vec2D::operator/=(Vec2D vec){
+	if(vec.getX()==0 || vec.getY()==0){
+		std::cerr <<"Error division By Zero!" << Dmath::ERROR_CODE::DIVISION_BY_ZERO << std::endl;
+		return;
+	}
   this->X /= vec.X;
   this->Y /= vec.Y;
   this->ValidManipulation();
@@ -250,6 +258,10 @@ void Vec2D::operator*=(Dmath::Scalar scalar){
 }
 
 void Vec2D::operator/=(Dmath::Scalar scalar){
+	if(scalar == 0){
+		std::cerr << "Error division By zero!"<< Dmath::ERROR_CODE::DIVISION_BY_ZERO << std::endl;
+		return;
+	}
   this->X /= scalar;
   this->Y /= scalar;
   this->ValidManipulation();
@@ -424,11 +436,19 @@ void Vec2D::multiplyYBy(Dmath::Scalar factor){
 }
 
 void Vec2D::divideXBy(Dmath::Scalar divBy){
+	if(divBy == 0){
+		std::cerr << "Error division By Zero" << Dmath::ERROR_CODE::DIVISION_BY_ZERO << std::endl;
+		return;
+	}
   this->X /= divBy;
   this->ValidManipulation();
 }
 
 void Vec2D::divideYBy(Dmath::Scalar divBy){
+	if(divBy == 0){
+		std::cerr << "Error division By Zero" << Dmath::ERROR_CODE::DIVISION_BY_ZERO << std::endl;
+		return;
+	}
   this->Y /= divBy;
   this->ValidManipulation();
 }
@@ -640,6 +660,15 @@ void Vec3D::operator*=(Vec3D mathvector){
 }
 
 void Vec3D::operator/=(Vec3D mathvector){
+
+	if(mathvector.getX() == 0 ||
+       mathvector.getY() == 0 ||
+	   mathvector.getZ() == 0 )
+	{
+		std::cerr << "Error division By zero!" << std::endl;
+		return;
+	}
+
   this->X /= mathvector.getX();
   this->Y /= mathvector.getY();
   this->Z /= mathvector.getZ();
@@ -680,6 +709,10 @@ void Vec3D::operator*=(Dmath::sVec3f vec){
 }
 
 void Vec3D::operator/=(Dmath::sVec3f vec){
+	if(vec.X == 0 || vec.Y == 0 ||  vec.Z == 0 ){
+		std::cerr << "Error division By zero!" << std::endl;
+		return;
+	}
   this->X /= vec.X;
   this->Y /= vec.Y;
   this->Z /= vec.Z;
@@ -717,6 +750,10 @@ void Vec3D::operator*=(double scalar){
   this->cartesianToSphere();
 }
 void Vec3D::operator/=(double scalar){
+	if(scalar == 0){
+		std::cerr << "Error division by Zero! \nError-code" << Dmath::ERROR_CODE::DIVISION_BY_ZERO << std::endl; 
+		return ;
+	}
   this->X /= scalar;
   this->Y /= scalar;
   this->Z /= scalar;
@@ -760,6 +797,10 @@ void Vec3D::operator*=(Dmath::Trio<double,double,double> trio){
 
 
 void Vec3D::operator/=(Dmath::Trio<double,double,double> trio){
+	if(trio.one == 0 || trio.two == 0 || trio.three == 0){
+		std::cerr << "Error division by Zero! \nError-code" << Dmath::ERROR_CODE::DIVISION_BY_ZERO << std::endl; 
+		return;
+	}
   this->X /= trio.one;
   this->Y /= trio.two;
   this->Z /= trio.three;
@@ -787,6 +828,32 @@ double Vec3D::operator*(Vec3D &Mathvector) {
   return this->dotProduct(Mathvector);
 }
 
+//[a0 ,b0, c0] [x] a0X + b0Y + 
+//[a1 ,b1, c1] [y]
+//[a2 ,b2, c2] [z]
+
+Dmath::Vec3D Dmath::Vec3D::operator*(Dmath::Matrix<Dmath::Scalar> transformation)
+{
+    Dmath::Scalar newX =
+        transformation.getElement(1,1) * this->X +
+        transformation.getElement(1,2) * this->Y +
+        transformation.getElement(1,3) * this->Z;
+
+    Dmath::Scalar newY =
+        transformation.getElement(2,1) * this->X +
+        transformation.getElement(2,2) * this->Y +
+        transformation.getElement(2,3) * this->Z;
+
+    Dmath::Scalar newZ =
+        transformation.getElement(3,1) * this->X +
+        transformation.getElement(3,2) * this->Y +
+        transformation.getElement(3,3) * this->Z;
+
+    return Dmath::Vec3D(newX, newY, newZ);
+}
+
+
+
 void Vec3D::addToX(double add){
   this->X += add;
   this->calcAbs();
@@ -799,6 +866,40 @@ void Vec3D::addToY(double add){
 }
 void Vec3D::addToZ(double add){
   this->Z += add;
+  this->calcAbs();
+}
+
+
+void Dmath::Vec3D::addXYZEach(Dmath::Scalar xPlus, Dmath::Scalar yPlus, Dmath::Scalar zPlus){
+  this->X += xPlus;
+  this->Y += yPlus;
+  this->Z += zPlus;
+  this->calcAbs();
+}
+
+void Dmath::Vec3D::subtractXYZ(Dmath::Scalar xMinus, Dmath::Scalar yMinus, Dmath::Scalar zMinus){
+  this->X -= xMinus;
+  this->Y -= yMinus;
+  this->Z -= zMinus;
+  this->calcAbs();
+}
+
+void Dmath::Vec3D::multilpyXYZ(Dmath::Scalar xTimes, Dmath::Scalar yTimes, Dmath::Scalar zTimes){
+  this->X *= xTimes;
+  this->Y *= yTimes;
+  this->Z *= zTimes;
+  this->calcAbs();
+}
+
+void Dmath::Vec3D::divideXYZBy(Dmath::Scalar xDivBy, Dmath::Scalar yDivBy, Dmath::Scalar zDivBy){
+  if(xDivBy == 0 || yDivBy == 0 || zDivBy == 0){
+    std::cerr << "Error Division by Zero! Error-code: " <<
+              Dmath::ERROR_CODE::DIVISION_BY_ZERO 		<< std::endl;
+    return;
+  }
+  this->X /= xDivBy;
+  this->Y /= yDivBy;
+  this->Z /= zDivBy;
   this->calcAbs();
 }
 
@@ -872,7 +973,8 @@ void Vec3D::operator=(Dmath::Trio<double,double,double> trio){
   this->Y = trio.two;
   this->Z = trio.three;
   this->calcAbs();
-  this->cartesianToPolar();
+  this->cartesianToSphere();
+  this->cartesianToCylinder();
 }
 
 void Vec3D::operator=(Dmath::Vec3D vec){
@@ -1049,8 +1151,10 @@ void Vec3D::normalize(){
 
 
 void Vec2D::rotateThisVector(Dmath::Scalar value){
-  this->X = this->getX() * std::cos(value) - this->getY() * std::sin(value);
-  this->Y = this->getX() * std::sin(value) + this->getY() * std::cos(value);
+  Dmath::Scalar xX = this->getX();
+  Dmath::Scalar yY = this->getY();
+  this->X = xX * std::cos(value) - yY * std::sin(value);
+  this->Y = xX * std::sin(value) + yY * std::cos(value);
   this->vectorRotation = value;
 }
 
@@ -1062,8 +1166,8 @@ Dmath::Vec3D Vec3D::rotateVector(double Phi, double Theta) {
     double newTheta = theta + Theta;
     double newPhi = phi + Phi;
 
-    double newX = (r * std::sin(newTheta) * std::cos(newPhi)) * RAD_TO_DEG;
-    double newY = (r * std::sin(newTheta) * std::sin(newPhi)) * RAD_TO_DEG ;
+    double newX = (r * std::sin(newTheta) * std::cos(newPhi));
+    double newY = (r * std::sin(newTheta) * std::sin(newPhi));
     double newZ = (r * std::cos(newTheta))* RAD_TO_DEG;
 
     return Dmath::Vec3D(newX, newY, newZ);

@@ -20,11 +20,6 @@
 
 #ifdef SYSTEM_READY
 
-#pragma region MathHelper
-// A helper class with some pre defined functions
-
-
-#pragma endregion
 
 
 #pragma region 2D-Coordinates
