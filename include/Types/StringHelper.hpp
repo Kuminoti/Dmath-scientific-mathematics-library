@@ -1,7 +1,7 @@
 #pragma once 
 
-#ifndef DSTRING_HPP
-#define DSTRING_HPP
+#ifndef DMATH_STRING_HELPER_HPP
+#define DMATH_STRING_HELPER_HPP
 
 #include"../Utils/dataTypes.hpp"
 #include<unordered_map>
@@ -29,7 +29,7 @@ public:
 
     //Extractors
     std::string extractFromTo(const std::string& mainString, char start, char end);
-    Dmath::Text extractSentences(const std::string& mainString);
+    std::vector<std::string> extractSentences(const std::string& mainString);
     std::string extractFirstWord(const std::string& str);
     std::string getInBrackets(const std::string& input);
 

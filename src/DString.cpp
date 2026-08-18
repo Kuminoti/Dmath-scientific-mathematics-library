@@ -1,4 +1,4 @@
-#include"../include/Types/Dstring.hpp"
+#include"../include/Types/StringHelper.hpp"
 
 
 bool Dmath::StringHelper::exsitsIn(const std::string& mainString, const std::string& find){
@@ -139,8 +139,8 @@ std::string Dmath::StringHelper::extractFromTo(const std::string& mainString, ch
 }
 
 
-Dmath::Text Dmath::StringHelper::extractSentences(const std::string& mainString) {
-    Dmath::Text sentences;
+std::vector<std::string> Dmath::StringHelper::extractSentences(const std::string& mainString) {
+    std::vector<std::string> sentences;
     std::string sentence;
 
     for (size_t i = 0; i < mainString.size(); ++i) {
