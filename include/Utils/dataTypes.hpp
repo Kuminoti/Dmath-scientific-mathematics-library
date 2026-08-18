@@ -27,7 +27,7 @@ typedef std::function<double(double, double, double)> tripleVarFunction;
 
 typedef std::vector<double> doubleVector;
 
-typedef std::vector<std::string> Text;
+
 
 typedef uint8_t byte;
 
