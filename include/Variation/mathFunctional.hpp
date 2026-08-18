@@ -109,11 +109,10 @@ public:
     }
 
    template<typename Func>
-auto operator()(Func func)
-    -> decltype(this->functionalOperator(this->params, func))
-{
-    return this->functionalOperator(this->params, func);
-}
+    auto operator()(Func func) -> decltype(this->functionalOperator(this->params, func)){
+
+        return this->functionalOperator(this->params, func);
+    }
 
 
     void setFunctionalOperator(OP funcOP){

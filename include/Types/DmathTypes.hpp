@@ -6,7 +6,7 @@
 #include"callbacks.hpp"
 #include"dList.hpp"
 //#include"DmathFile.hpp"
-#include"Dstring.hpp"
+#include"StringHelper.hpp"
 #include"logger.hpp"
 #include"node.hpp"
 #include"setTheory.hpp"
