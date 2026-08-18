@@ -266,6 +266,8 @@ private: //private methods:
 
 public: //public getters
 
+    void setFuncData(std::string data){ this->funcData = data; }
+
     //Operator less function call
     double getDataAt(double x){ return this->funcBase->Callx(x);  }
 
