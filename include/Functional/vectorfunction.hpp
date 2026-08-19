@@ -58,11 +58,18 @@ public: //Public constructors
 
     //operator for crossproducts
     SingleVectorFunction crossProduct(SingleVectorFunction funcTwo);
-    //Getters:
 
+
+    //Getters:
     const Dmath::SingleVarFunction& getXFunc(){ return this->xOfT;    }
     const Dmath::SingleVarFunction& getYFunc(){ return this->yOfT;    }
     const Dmath::SingleVarFunction& getZFunc(){ return this->zOfT;    }
+
+    //setters
+    void setXFunc(Dmath::SingleVarFunction func){ this->xOfT = func; }
+    void setYFunc(Dmath::SingleVarFunction func){ this->yOfT = func; }
+    void setZFunc(Dmath::SingleVarFunction func){ this->zOfT = func; }
+
 
 
     //Call the functions
@@ -70,8 +77,9 @@ public: //Public constructors
     inline Dmath::Scalar callY(Dmath::Scalar t){ return yOfT(t); }
     inline Dmath::Scalar callZ(Dmath::Scalar t){ return zOfT(t); }
 
-    
+    Dmath::SingleVarFunction NABLA();
     Dmath::Vec3D getTangentialVectorAt(Dmath::Scalar t);
+
 };
 
 #pragma endregion //single 
@@ -152,6 +160,7 @@ class SHARED_LIB TripleVectorFunction{
   public:
 
     TripleVectorFunction(Dmath::TripleVarFunction xOfUVW, Dmath::TripleVarFunction yOfUVW, Dmath::TripleVarFunction zOfUVW);
+    TripleVectorFunction() = default;
     Dmath::Vec3D operator()(Dmath::Scalar u, Dmath::Scalar v, Dmath::Scalar w);
 
     //Tangential vektoren

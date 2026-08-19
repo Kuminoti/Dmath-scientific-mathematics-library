@@ -75,10 +75,25 @@ Dmath::SingleVarFunction operator*(std::string op, Dmath::SingleVarFunction& fun
 }
 
 
+    #pragma endregion
+
+
+#pragma region DoubleVar OP
 
 
 
-#pragma endregion
+
+
+
+
+
+
+
+
+
+
+
+#pragma endregion //DoubleVar OP
 
 NAMESPACEEND
 

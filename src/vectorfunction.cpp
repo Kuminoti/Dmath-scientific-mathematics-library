@@ -103,6 +103,17 @@ Dmath::Vec3D Dmath::SingleVectorFunction::getTangentialVectorAt(Dmath::Scalar t)
     return Dmath::Vec3D(dx,dy,dz);
 }
 
+Dmath::SingleVarFunction Dmath::SingleVectorFunction::NABLA(){
+
+        std::string functionData = "d/dt(" + xOfT.getFunctionData() + ") + d/dt(" + yOfT.getFunctionData() + ") + d/dt(" + zOfT.getFunctionData() + ")";
+
+        Dmath::SingleVarFunction f([=](Dmath::Scalar t) ->Dmath::Scalar {
+            return this->xOfT.getDerivative()(t) + this->yOfT.getDerivative()(t) + this->yOfT.getDerivative()(t);
+        },
+        functionData);
+        return f;
+    }
+
 #pragma endregion
 
 
