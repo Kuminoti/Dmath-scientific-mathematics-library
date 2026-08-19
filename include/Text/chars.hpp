@@ -86,7 +86,9 @@ static Dmath::MapD<std::string, std::string> SpecialChars = {
 
     {"proportional",    u8"∝"},
 
-    {"derivative", "d/dx"}
+    {"derivative", "d/dx"},
+    {"secondderivative", "d²/dx²"},
+    {"thirdderivative", "d³/dx³"},
     {"partial",     u8"∂"},
     {"nabla",       u8"∇"},
 
