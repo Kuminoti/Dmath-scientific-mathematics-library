@@ -60,16 +60,7 @@ bool Dmath::StringHelper::isNumeric(const std::string& str) {
     return hasDigit; // Mindestens eine Ziffer muss enthalten sein
 }
 
-std::string Dmath::StringHelper::extractFirstWord(const std::string& str) {
-    std::string result;
 
-    for (char c : str) {
-        if (c == ' ' || c == '.') break; // Stoppe bei Leerzeichen oder Punkt
-        result += c;
-    }
-
-    return result;
-}
 
 std::string Dmath::StringHelper::getInBrackets(const std::string& s) {
 
@@ -122,6 +113,53 @@ std::string Dmath::StringHelper::getInBrackets(const std::string& s) {
     throw std::invalid_argument("Unclosed bracket");
 }
 
+std::vector<Dmath::Scalar>
+Dmath::StringHelper::getNumbersInBrackets( std::string input){
+   
+    std::vector<Dmath::Scalar> numbers;
+
+
+    input = this->extractFromTo(input,'(',')');
+    
+    std::stringstream ss(input);
+    std::string token;
+
+    while (std::getline(ss, token, ',')) {
+
+        // Leerzeichen am Anfang/Ende entfernen
+        const auto first = token.find_first_not_of(" \t\n\r");
+        const auto last  = token.find_last_not_of(" \t\n\r");
+
+        if (first == std::string::npos)
+            throw std::invalid_argument(
+                "Empty number in brackets: " + input
+            );
+
+        token = token.substr(first, last - first + 1);
+
+        try {
+            size_t pos = 0;
+            Dmath::Scalar value = std::stod(token, &pos);
+
+            // Sicherstellen, dass wirklich der komplette Token
+            // eine Zahl war.
+            if (pos != token.size()) {
+                throw std::invalid_argument(
+                    "Invalid number: " + token
+                );
+            }
+
+            numbers.push_back(value);
+        }
+        catch (const std::exception&) {
+            throw std::invalid_argument(
+                "Invalid number in brackets: " + token
+            );
+        }
+    }
+
+    return numbers;
+}
 
 
 
@@ -136,6 +174,96 @@ std::string Dmath::StringHelper::extractFromTo(const std::string& mainString, ch
 
     stringExtract = mainString.substr(startPos + 1, endPos - startPos - 1);
     return stringExtract;
+}
+
+
+std::string Dmath::StringHelper::extractWords(
+    const std::string& mainString,
+    const std::string& start,
+    const std::string& end)
+{
+    if (!this->exsitsIn(mainString, start) ||
+        !this->exsitsIn(mainString, end))
+    {
+        return "";
+    }
+
+    size_t startPos = mainString.find(start);
+    size_t endPos = mainString.find(end, startPos + start.size());
+
+    if (endPos == std::string::npos)
+        return "";
+
+    // Alles zwischen start und end
+    size_t contentStart = startPos + start.size();
+
+    std::string result =
+        mainString.substr(
+            contentStart,
+            endPos - contentStart
+        );
+
+    // Whitespace und ':' am Anfang/Ende entfernen
+    size_t first = result.find_first_not_of(" \t\n\r:");
+    size_t last  = result.find_last_not_of(" \t\n\r:");
+
+    if (first == std::string::npos)
+        return "";
+
+    return result.substr(first, last - first + 1);
+}
+
+std::vector<std::string>
+Dmath::StringHelper::extractAfter(
+    const std::string& mainString,
+    char symbol)
+{
+    std::vector<std::string> sentences;
+    std::string sentence;
+
+    for (char c : mainString)
+    {
+        sentence += c;
+
+        if (c == symbol)
+        {
+            // Führende Whitespaces entfernen
+            const size_t start =
+                sentence.find_first_not_of(" \t\r\n");
+
+            // Nachlaufende Whitespaces entfernen
+            const size_t end =
+                sentence.find_last_not_of(" \t\r\n");
+
+            if (start != std::string::npos)
+            {
+                sentences.push_back(
+                    sentence.substr(start, end - start + 1)
+                );
+            }
+
+            sentence.clear();
+        }
+    }
+
+    // Falls am Ende kein ';' vorhanden war
+    if (!sentence.empty())
+    {
+        const size_t start =
+            sentence.find_first_not_of(" \t\r\n");
+
+        const size_t end =
+            sentence.find_last_not_of(" \t\r\n");
+
+        if (start != std::string::npos)
+        {
+            sentences.push_back(
+                sentence.substr(start, end - start + 1)
+            );
+        }
+    }
+
+    return sentences;
 }
 
 
@@ -157,6 +285,16 @@ std::vector<std::string> Dmath::StringHelper::extractSentences(const std::string
 
         sentence.clear(); 
         }
+         if (!sentence.empty()) {
+        size_t start = sentence.find_first_not_of(" \t\n");
+        size_t end = sentence.find_last_not_of(" \t\n");
+
+        if (start != std::string::npos) {
+            sentences.push_back(sentence.substr(start, end - start + 1));
+        }
+    }
+
+    return sentences;
     }
 
     if (!sentence.empty()) {

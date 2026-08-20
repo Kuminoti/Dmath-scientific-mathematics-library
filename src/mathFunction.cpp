@@ -467,7 +467,7 @@ Dmath::SingleVarFunction Dmath::SingleVarFunction::getDerivative(){
             double plusDX  = funcBase->Callx(x + dx);
             double minusDX = funcBase->Callx(x - dx);
             return (plusDX - minusDX) / (2 * dx);
-        });
+        },"d/dx(" + this->funcData + ")");
 
 }
 

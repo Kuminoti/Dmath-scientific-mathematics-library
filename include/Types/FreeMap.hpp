@@ -205,15 +205,24 @@ class FreeMap{
 
 
   public: 
-
+FreeMap& operator=(const FreeMap& other)
+{
+    mainMap = other.mainMap;
+    size = other.size;
+    return *this;
+}
     template<typename T>
     T get(dmath key){
         return this->getFromKey(key).get<T>();
     }
 
     Obj& operator[](Dmath::Natural i) {
-        return mainMap.at(i).two;
-    }
+    return mainMap.at(i).two;
+}
+
+const Obj& operator[](Dmath::Natural i) const {
+    return mainMap.at(i).two;
+}
 
     template<typename Input>
     void insert(dmath dataKey,Input value ){
@@ -234,13 +243,27 @@ class FreeMap{
             obj.type = Obj::Type::FUNC;
             obj.Func = value;
         }
+        else if constexpr (std::is_same<Input,Dmath::Vec2D>::value){
+            obj.type = Obj::Type::VEC2;
+            obj.vec2 = value;
+        }
+        else if constexpr (std::is_same<Input,Dmath::Vec3D>::value){
+            obj.type = Obj::Type::VEC3;
+            obj.vec3 = value;
+        } 
+        else if constexpr (std::is_same<Input,Dmath::Natural>::value){
+            obj.type = Obj::Type::NATURAL;
+            obj.intNum = value;
+        }
 
         this->mainMap.push_back({dataKey, obj});
         
     }
 
 
-
+    dmath getKeyFromIndex(Dmath::Natural i) const {
+        return this->mainMap[i].one;
+    }
 
     Obj& getFromKey(const dmath& key) {
 
@@ -257,7 +280,7 @@ class FreeMap{
     }
 
 
-    Dmath::Natural getSize() { return mainMap.size();}
+    Dmath::Natural getSize() const { return mainMap.size();}
 
 
 

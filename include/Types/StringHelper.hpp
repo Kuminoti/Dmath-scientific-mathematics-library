@@ -8,7 +8,7 @@
 #include<stdexcept>
 #include<algorithm>
 #include <sstream>
-
+#include<iostream>
 NAMESPACESTART
 
 class  StringHelper{
@@ -29,9 +29,29 @@ public:
 
     //Extractors
     std::string extractFromTo(const std::string& mainString, char start, char end);
+
+    std::string extractWords(const std::string& mainString, const std::string& start,const std::string &end);
+
+    //Extracts pushes the data in a vector when a specific symbol is found
+    //For example the extract commands seperated by a ;
+    std::vector<std::string> extractAfter(const std::string& mainString, char symbol);
+
+    //Stopps at a . ? or ! and pushes it into a a vector
     std::vector<std::string> extractSentences(const std::string& mainString);
-    std::string extractFirstWord(const std::string& str);
+
+    //Checks for whitespace or symbols like . , ; :
+    std::string extractFirstWord(const std::string& str) {
+    std::string result;
+
+    for (char c : str) {
+        if (c == ' ' || c == '.' || c == ',' || c == ';') break; // Stoppe bei Leerzeichen oder Punkt
+        result += c;
+    }
+
+    return result;
+}
     std::string getInBrackets(const std::string& input);
+    std::vector<Dmath::Scalar> getNumbersInBrackets(std::string input);
 
     //Formatter
     std::string toLower(const std::string& mainString);

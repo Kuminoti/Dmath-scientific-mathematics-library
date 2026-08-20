@@ -280,6 +280,7 @@ public: //operator overloading
     SingleVarFunction& operator=(const SingleVarFunction& other) {
     if (this != &other) {
         funcBase = other.funcBase ? other.funcBase->clone() : nullptr;
+        funcData = other.funcData;
     }
         return *this;
     }
@@ -319,13 +320,14 @@ public: //Public constructors
     SingleVarFunction(Callable func)
         : funcBase(std::make_shared<FunctionWrapper<Callable>>(std::move(func))) {}
 
-    SingleVarFunction(const SingleVarFunction& other) : funcBase(other.funcBase ? other.funcBase->clone() : nullptr) {}
+    SingleVarFunction(const SingleVarFunction& other) : funcData(other.funcData),
+      funcBase(other.funcBase ? other.funcBase->clone() : nullptr) {}
 
     SingleVarFunction() = default;
 
     // Move-Konstruktor
-SingleVarFunction(SingleVarFunction&& other) noexcept
-    : funcBase(std::move(other.funcBase)) {}
+    SingleVarFunction(SingleVarFunction&& other) noexcept
+       : funcData(std::move(other.funcData)), funcBase(std::move(other.funcBase)) {}
 
   public: //Numeric Operator overloading
 

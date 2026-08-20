@@ -43,15 +43,17 @@ typedef size_t Natural; //Natural number: an evern and positive number >= 0
   */
 
 enum ERROR_CODE{
-  DIVISION_BY_ZERO = 1001,
-  UNDEFINED        = 1002,
-  INVALID_ARGUMENT = 2001,
-  OUT_OF_RANGE     = 2002,
-  TYPE_ERROR       = 3001,
-  WRONG_PARAMETER  = 4001,
-  WRONG_TYPE       = 5001,
-  STRING_INPUT_ERR = 6001,
-  OTHER_ERROR       = 9999
+  DIVISION_BY_ZERO   = 1001,
+  UNDEFINED          = 1002,
+  INVALID_ARGUMENT   = 2001,
+  OUT_OF_RANGE       = 2002,
+  TYPE_ERROR         = 3001,
+  WRONG_PARAMETER    = 4001,
+  WRONG_TYPE         = 5001,
+  STRING_INPUT_ERR   = 6001,
+  UNKNOWEN_FILE      = 6002, //Cant find the file path
+  UNKNOWEN_FILE_TYPE = 6003, //Wrong or unkowen file ending .sickMyDuck
+  OTHER_ERROR        = 9999
 };
 
 
