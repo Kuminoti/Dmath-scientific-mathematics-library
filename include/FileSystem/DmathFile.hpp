@@ -49,9 +49,10 @@ class DmathFile : public Dmath::DFStraem {
 
 public: //public constructors and destructors
        // Dmath-Datei laden
-    explicit DmathFile(const std::string& filePath)
-        : src(filePath)
-    { }
+    explicit DmathFile(const std::string& filePath) : src(filePath){
+        Dmath::FreeMap<std::string> fm = this->loadDmathFile(filePath);
+        this->importMap(fm);
+     }
     
     DmathFile() = default;
 
@@ -125,6 +126,7 @@ public:
 
     template<typename dmath>
     void insertDmathObject(std::string objName, dmath data){
+        
         if constexpr (std::is_same<dmath,Dmath::Vec3D>::value){
            this->content.insert("Vector3D " + objName, data);
         }
@@ -149,17 +151,14 @@ public:
         }
     }
     
-    void importMap(const Dmath::FreeMap<std::string> inputMap)
-{
+    void importMap(const Dmath::FreeMap<std::string> inputMap){
     const Dmath::Natural num = inputMap.getSize();
 
-    for (size_t i = 0; i < num; ++i)
-    {
+    for (size_t i = 0; i < num; ++i){
         std::string currentKey = inputMap.getKeyFromIndex(i);
         Dmath::Obj obj = inputMap[i];
 
-        switch (obj.type)
-        {
+        switch (obj.type){
             case Dmath::Obj::Type::VEC2:
             {
                 this->insertDmathObject<Dmath::Vec2D>(
