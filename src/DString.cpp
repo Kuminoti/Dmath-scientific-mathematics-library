@@ -266,6 +266,16 @@ Dmath::StringHelper::extractAfter(
     return sentences;
 }
 
+std::string Dmath::StringHelper::extractFirstWord(const std::string& str) {
+        std::string result;
+
+    for (char c : str) {
+        if (c == ' ' || c == '.' || c == ',' || c == ';') break; // Stoppe bei Leerzeichen oder Punkt
+        result += c;
+    }
+
+    return result;
+}
 
 std::vector<std::string> Dmath::StringHelper::extractSentences(const std::string& mainString) {
     std::vector<std::string> sentences;
@@ -405,7 +415,64 @@ std::string  Dmath::StringHelper::getFileExtension(const std::string& filename) 
     return filename.substr(pos);  // inkl. Punkt, z.B. ".exe"
 }
 
+std::string Dmath::StringHelper::fixDuplicate(const std::string& duplicate){
+    // Bereits vorhandenes _N am Ende erkennen
+    size_t underscore = duplicate.rfind('_');
 
+    if (underscore != std::string::npos &&
+        underscore + 1 < duplicate.size()){
+        std::string suffix = duplicate.substr(underscore + 1);
+
+        // Prüfen, ob hinter '_' ausschließlich Ziffern stehen
+        bool isNumber = !suffix.empty();
+
+        for (char c : suffix){
+            if (!std::isdigit(static_cast<unsigned char>(c)))
+            {
+                isNumber = false;
+                break;
+            }
+        }
+
+        if (isNumber)
+        {
+            std::string base = duplicate.substr(0, underscore);
+
+            unsigned long number = std::stoul(suffix);
+            ++number;
+
+            return base + "_" + std::to_string(number);
+        }
+    }
+
+    // Noch keine Duplikatnummer vorhanden
+    return duplicate + "_1";
+}
+
+
+std::string Dmath::StringHelper::fixDuplicates(std::string name, std::vector<std::string> existingNames){
+        // Name existiert noch nicht
+        if (std::find(existingNames.begin(), existingNames.end(), name) == existingNames.end()){
+            return name;
+        }
+
+        // Name existiert -> _1, _2, _3, ...
+        size_t counter = 1;
+
+        while (true)
+        {
+            std::string candidate = name + "_" + std::to_string(counter);
+
+            if (std::find(existingNames.begin(), existingNames.end(), candidate)
+                == existingNames.end())
+            {
+                return candidate;
+            }
+
+            ++counter;
+        }
+        return "";
+    }
 
 std::string Dmath::StringHelper::removeWhitespace(const std::string& str){
     std::string result;

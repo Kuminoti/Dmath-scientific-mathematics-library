@@ -18,31 +18,10 @@ class VectorPlane : public Dmath::VectorLine {
         this->dirVecTwo = dirVecTwo;
     }
 
-    Dmath::Vec3D operator()(Dmath::Scalar U, Dmath::Scalar V) const {
-        
-        auto f = this->getParametric();
-
-        return f(U,V);
-    }
+    Dmath::Vec3D operator()(Dmath::Scalar U, Dmath::Scalar V) const ;
 
 
-    Dmath::DoubleVectorFunction getParametric() const {
-
-        Dmath::DoubleVarFunction xOfUV = [this](Dmath::Scalar U, Dmath::Scalar V) ->Dmath::Scalar {
-            return originVec.getX() + U * directionVec.getX() + V * dirVecTwo.getX();
-        };
-        Dmath::DoubleVarFunction yOfUV = [this](Dmath::Scalar U, Dmath::Scalar V) ->Dmath::Scalar {
-            return originVec.getY() + U * directionVec.getY() + V * dirVecTwo.getY();
-        };
-        Dmath::DoubleVarFunction zOfUV = [this](Dmath::Scalar U, Dmath::Scalar V) ->Dmath::Scalar {
-            return originVec.getZ() + U * directionVec.getZ() + V * dirVecTwo.getZ();
-        };
-
-
-        return Dmath::DoubleVectorFunction(xOfUV,yOfUV,zOfUV);
-
-
-    }
+    Dmath::DoubleVectorFunction getParametric() const ;
 
 };
 

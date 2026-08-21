@@ -3,6 +3,7 @@ bin/
 .vscode/
 build/
 debug/
+src/old/
 #later
 Documentation/ 
 

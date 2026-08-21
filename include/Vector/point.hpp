@@ -19,21 +19,9 @@ NAMESPACESTART
 typedef Dmath::sVec3<std::string> Point;
 
 
-Point vecToPoint(Dmath::Vec3D vec){
-    std::string X_ = std::to_string(vec.getX());
-    std::string Y_ = std::to_string(vec.getY());
-    std::string Z_ = std::to_string(vec.getZ());
+Point vecToPoint(Dmath::Vec3D vec);
 
-    return Dmath::Point(X_,Y_,Z_);
-}
-
-Dmath::Vec3D pointToVec(Dmath::Point p){
-    Dmath::Scalar _X = std::stod(p.X);
-    Dmath::Scalar _Y = std::stod(p.Y);
-    Dmath::Scalar _Z = std::stod(p.Z);
-
-    return Dmath::Vec3D(_X,_Y,_Z);
-}
+Dmath::Vec3D pointToVec(Dmath::Point p);
 
 
 
