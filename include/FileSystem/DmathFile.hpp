@@ -84,6 +84,12 @@ public: //public constructors and destructors
                 data += Dmath::fileVector2D(objName, vec2d);
                 continue; 
             }
+
+            else if(name == "String"){
+                std::string str = this->content[i].get<std::string>(); 
+                data +=  objName + str + ";\n\t";
+                continue; 
+            }
             else if(name == "Scalar"){
                 Dmath::Scalar x  = this->content[i].get<Dmath::Scalar>(); 
                 data += objName + " = " + std::to_string(x) + ";\n\t";
@@ -116,12 +122,12 @@ public: //public constructors and destructors
 public:
 
 
-    Dmath::FreeMap<std::string>& getElements() {
+    Dmath::FreeMap<std::string> getElements() {
         return this->content;
     }
 
-    void saveDmathFile(){
-        if(writeFile(this->src,this->getDmathString())){
+    void saveDmathFile(std::string filePath){
+        if(writeFile(filePath,this->getDmathString())){
             std::cout << "Saved file as: " + src + "\n";
             return;
         }
@@ -148,11 +154,26 @@ public:
         else if constexpr (std::is_same<dmath,Dmath::SingleVarFunction>::value){
            this->content.insert("Function " + objName + "(x)",data);
         }
+        else if constexpr (std::is_same<dmath,Dmath::DoubleVarFunction>::value){
+           this->content.insert("Function " + objName + "(x,y)",data);
+        }
+        else if constexpr (std::is_same<dmath,Dmath::TripleVarFunction>::value){
+           this->content.insert("Function " + objName + "(x,y,z)",data);
+        }
         else if constexpr (std::is_same<dmath,Dmath::SingleVectorFunction>::value){
-           this->content.insert("Curve " + objName + "(x)" ,data);
+           this->content.insert("Curve " + objName + "(t)" ,data);
+        }
+        else if constexpr (std::is_same<dmath,Dmath::DoubleVectorFunction>::value){
+           this->content.insert("Curve " + objName + "(u,v)" ,data);
+        }
+        else if constexpr (std::is_same<dmath,Dmath::TripleVectorFunction>::value){
+           this->content.insert("Curve " + objName + "(u,v,w)" ,data);
         }
         else if constexpr (std::is_same<dmath,Dmath::Complex>::value){
            this->content.insert("Complex " + objName,data);
+        }
+        else if constexpr (std::is_same<dmath,std::string>::value){
+            this->content.insert("String " + objName,data);
         }
     }
     
@@ -164,6 +185,18 @@ public:
         Dmath::Obj obj = inputMap[i];
 
         switch (obj.type){
+
+             case Dmath::Obj::Type::STRING :
+            {
+                this->insertDmathObject<std::string>(
+                    currentKey,
+                    obj.get<std::string>()
+                );
+                break;
+            }
+
+
+
             case Dmath::Obj::Type::VEC2:
             {
                 this->insertDmathObject<Dmath::Vec2D>(
@@ -273,6 +306,12 @@ public:
                 Dmath::Vec3D vec = Dmath::getFromFileVec3D(currentTypeData);
                 DmathObjs.insert<Dmath::Vec3D>(currentTypeData.two,vec);
             }
+
+            else if(currentTypeData.one == "String"){
+                std::string str = currentTypeData.three;
+                DmathObjs.insert<std::string>(currentTypeData.two,str);
+            }
+
             
 
 
