@@ -72,14 +72,14 @@ std::string Dmath::StringHelper::getInBrackets(const std::string& s) {
     };
 
     if (s.size() < 2)
-        throw std::invalid_argument("String too short");
+        throw std::invalid_argument("Analyse Error: Dmath::StringHelper::getInBrackets(const std::string& s) too short");
 
     char open = s.front();
 
     // C++17 replacement for contains()
     auto it = brackets.find(open);
     if (it == brackets.end())
-        throw std::invalid_argument("No opening bracket");
+        throw std::invalid_argument("Analyse Error: Dmath::StringHelper::getInBrackets(const std::string& s) No opening bracket");
 
     char close = it->second;
 
@@ -105,12 +105,12 @@ std::string Dmath::StringHelper::getInBrackets(const std::string& s) {
                 std::any_of(brackets.begin(), brackets.end(),
                     [c](const auto& p) { return p.second == c; }))
             {
-                throw std::invalid_argument("Mismatched brackets");
+                throw std::invalid_argument("Analyse Error: Dmath::StringHelper::getInBrackets(const std::string& s) Mismatched brackets");
             }
         }
     }
 
-    throw std::invalid_argument("Unclosed bracket");
+    throw std::invalid_argument("Analyse Error: Dmath::StringHelper::getInBrackets(const std::string& s) Unclosed bracket");
 }
 
 std::vector<Dmath::Scalar>

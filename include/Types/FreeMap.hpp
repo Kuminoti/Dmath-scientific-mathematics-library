@@ -225,7 +225,7 @@ const Obj& operator[](Dmath::Natural i) const {
 }
 
     template<typename Input>
-    void insert(dmath dataKey,Input value ){
+    void insert(dmath dataKey,Input value ){ // double triple und vec functions
         Obj obj;
         if constexpr (std::is_same<Input,std::string>::value){
             obj.type = Obj::Type::STRING;
@@ -239,10 +239,31 @@ const Obj& operator[](Dmath::Natural i) const {
             obj.type = Obj::Type::SINGLE_FUNC;
             obj.sFunc = value;
         }
+        else if constexpr (std::is_same<Input,Dmath::DoubleVarFunction>::value){
+            obj.type = Obj::Type::DOUBLE_FUNC;
+            obj.dFunc = value;
+        }
+         else if constexpr (std::is_same<Input,Dmath::TripleVarFunction>::value){
+            obj.type = Obj::Type::TRIPLE_FUNC;
+            obj.tFunc = value;
+        }
         else if constexpr (std::is_same<Input,Dmath::Function>::value){
             obj.type = Obj::Type::FUNC;
             obj.Func = value;
         }
+        else if constexpr (std::is_same<Input,Dmath::SingleVectorFunction>::value){     
+            obj.type = Obj::Type::SINGLE_VEC_FUNC;
+            obj.svFunc = value;
+        }
+        else if constexpr (std::is_same<Input,Dmath::DoubleVectorFunction>::value){     
+            obj.type = Obj::Type::DOUBLE_VEC_FUNC;
+            obj.dvFunc = value;
+        }
+        else if constexpr (std::is_same<Input,Dmath::TripleVectorFunction>::value){     
+            obj.type = Obj::Type::TRIPLE_VEC_FUNC;
+            obj.tvFunc = value;
+        }
+
         else if constexpr (std::is_same<Input,Dmath::Vec2D>::value){
             obj.type = Obj::Type::VEC2;
             obj.vec2 = value;
@@ -254,6 +275,10 @@ const Obj& operator[](Dmath::Natural i) const {
         else if constexpr (std::is_same<Input,Dmath::Natural>::value){
             obj.type = Obj::Type::NATURAL;
             obj.intNum = value;
+        }
+        else if constexpr (std::is_same<Input,Dmath::Complex>::value){
+            obj.type = Obj::Type::COMPLEX;
+            obj.complex = value;
         }
 
         this->mainMap.push_back({dataKey, obj});

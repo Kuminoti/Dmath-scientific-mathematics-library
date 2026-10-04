@@ -11,6 +11,7 @@
 #include<iostream>
 NAMESPACESTART
 
+
 class  StringHelper{
 
   public: //String checking: 

@@ -108,7 +108,17 @@ Dmath::Vec3D getFromFileVec3D(ObjDef data){
 
 
 
+inline constexpr auto fileScalar = [](std::string name, Dmath::Scalar Data) ->std::string {
+    return "Scalar " + name + " = " + std::to_string(Data) + ";";
+};
 
+inline constexpr auto fileNatural = [](std::string name, Dmath::Natural Data) ->std::string {
+    return "Natural " + name + " = " + std::to_string(Data) + ";";
+};
+inline constexpr auto fileComplex = [](std::string name, Dmath::Complex Data) ->std::string {
+    
+    return "Complex " + name + " = " + std::to_string(Data.getRealPart()) + " + " + std::to_string(Data.getImaginaryPart()) + ";";
+};
 
 
 

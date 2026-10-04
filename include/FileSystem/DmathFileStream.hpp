@@ -18,10 +18,15 @@ class DFStraem{
     /* The String component of the map holds the file ending (.txt, .Dmath, .exe etc)
      * and the Dmath::Function holds the specific file operations
     */
-    Dmath::MapD<std::string, Dmath::Function> fileOPs;
-
 
   public:
+
+  static bool exists(const std::string& filePath) {
+
+        std::ifstream file(filePath);
+
+        return file.good();
+    }
 
     //Loads a file and returns
     std::string getTxtFromFile(const std::string& filePath){
