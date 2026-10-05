@@ -128,7 +128,7 @@ public:
 
     void saveDmathFile(std::string filePath){
         if(writeFile(filePath,this->getDmathString())){
-            std::cout << "Saved file as: " + src + "\n";
+            std::cout << "Saved file as: " + filePath + "\n";
             return;
         }
         throw std::runtime_error("saveDmathFile(): Error writing file");
