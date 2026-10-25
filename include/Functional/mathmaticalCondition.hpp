@@ -120,6 +120,9 @@ public:
     
 
     Condition(const Condition& other) : funcBase(other.funcBase->clone()) {}
+
+    Condition() = default;
+
     Condition& operator=(const Condition& other) {
         if (this != &other)
             funcBase = other.funcBase->clone();
