@@ -41,6 +41,9 @@ class  StringHelper{
     std::string removeWord(const std::string& input, const std::string& word); 
 
   public: //Extractors
+
+
+    std::vector<std::string> splitLines(const std::string& input);
     //Extracts between two specific chars: ( "ILovehotMoms", I,h) => Love 
     std::string extractFromTo(const std::string& mainString, char start, char end);
 
@@ -62,6 +65,9 @@ class  StringHelper{
 
     //gets a string of numbers 
     std::vector<Dmath::Scalar> getNumbersInBrackets(std::string input);
+
+    //Gets the first letter of the line
+    
 
 
 

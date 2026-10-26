@@ -161,7 +161,22 @@ Dmath::StringHelper::getNumbersInBrackets( std::string input){
     return numbers;
 }
 
+std::vector<std::string> Dmath::StringHelper::splitLines(const std::string& input) {
+    std::vector<std::string> lines;
+    std::stringstream ss(input);
+    std::string line;
 
+    while (std::getline(ss, line, '\n')) {
+        // Remove trailing carriage return (Windows: \r\n)
+        if (!line.empty() && line.back() == '\r') {
+            line.pop_back();
+        }
+
+        lines.push_back(line);
+    }
+
+    return lines;
+}
 
 
 std::string Dmath::StringHelper::extractFromTo(const std::string& mainString, char start, char end) {
