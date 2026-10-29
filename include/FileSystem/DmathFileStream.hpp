@@ -43,7 +43,7 @@ class DFStraem{
 
 
 
-    bool writeFile(const std::string& outputPath, const std::string& text){
+    static bool writeFile(const std::string& outputPath, const std::string& text){
 
         std::ofstream file(outputPath, std::ios::out);
         if(!file){
