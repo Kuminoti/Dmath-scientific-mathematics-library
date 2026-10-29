@@ -43,6 +43,7 @@ typedef size_t Natural; //Natural number: an evern and positive number >= 0
   */
 
 enum ERROR_CODE{
+  GENERAL_ERROR      = 101,
   DIVISION_BY_ZERO   = 1001,
   UNDEFINED          = 1002,
   INVALID_ARGUMENT   = 2001,
